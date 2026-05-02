@@ -2,7 +2,6 @@ const slides = document.querySelector(".DivSliderSlides");
 const slideCount = document.querySelectorAll(".DivSliderSlidesSlide").length;
 const prevButton = document.querySelector(".ButtonPrev");
 const nextButton = document.querySelector(".ButtonNext");
-const slider = document.querySelector(".DivSlider");
 let currentIndex = 0;
 let autoPlayInterval;
 function goToSlide(index) {
