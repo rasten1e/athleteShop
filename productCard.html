@@ -32,7 +32,7 @@
             const avatarImg = document.getElementById("headerAvatar");
             const authBlock = document.getElementById("authBlock");
             try {
-                const response = await fetch("http://localhost:3000/api/loadInfToProfile", {
+                const response = await fetch("/api/loadInfToProfile", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ login: userLogin })
@@ -131,7 +131,7 @@
         let mainImg = null;
         document.addEventListener("DOMContentLoaded", async() => {
             try{
-                const response = await fetch("http://localhost:3000/api/products");
+                const response = await fetch("/api/products");
                 const data = await response.json();
                 const products = data.products || [];
                 products.forEach(p => {
@@ -236,7 +236,7 @@
                         return;
                     }
                     try{
-                        const response = await fetch(`http://localhost:3000/api/products/${productId}`, {
+                        const response = await fetch(`/api/products/${productId}`, {
                             method: "DELETE"
                         });
                         const result = await response.json();
@@ -289,7 +289,7 @@
         });
         async function loadProductReviews(productId) {
             try {
-                const response = await fetch(`http://localhost:3000/api/products/${productId}/reviews`);
+                const response = await fetch(`/api/products/${productId}/reviews`);
                 const data = await response.json();
                 if (data.success) {
                     document.getElementById("avgRating").textContent = "★ "+data.avgRating +" из 5";
@@ -337,7 +337,7 @@
             }
             const login = localStorage.getItem("userLogin");
             try {
-                const response = await fetch(`http://localhost:3000/api/reviews/${reviewId}`, {
+                const response = await fetch(`/api/reviews/${reviewId}`, {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ login: login })

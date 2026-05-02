@@ -95,7 +95,7 @@
         }
         try{
             console.log("FormData:", formData);
-            const response = await fetch("http://localhost:3000/api/addProduct", {
+            const response = await fetch("/api/addProduct", {
                 method: "POST",
                 body: formData
             });

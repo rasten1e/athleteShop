@@ -78,7 +78,7 @@
     });
     async function loadProductData(){
         try{
-            const response = await fetch("http://localhost:3000/api/products");
+            const response = await fetch("/api/products");
             const data = await response.json();
             const product = data.products.find(p => p.id.toString() === productId);
             if(!product){
@@ -146,7 +146,7 @@
         formData.append("productId", productId);
         try{
             console.log("FormData:"+formData);
-            const response = await fetch("http://localhost:3000/api/editProduct", {
+            const response = await fetch("/api/editProduct", {
                 method: "POST",
                 body: formData
             });

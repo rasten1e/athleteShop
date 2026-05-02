@@ -32,7 +32,7 @@
             const avatarImg = document.getElementById("headerAvatar");
             const authBlock = document.getElementById("authBlock");
             try {
-                const response = await fetch("http://localhost:3000/api/loadInfToProfile", {
+                const response = await fetch("/api/loadInfToProfile", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ login: userLogin })
@@ -175,7 +175,7 @@
                 return;
             }
             try{
-                const response = await fetch("http://localhost:3000/api/newOrder", {
+                const response = await fetch("/api/newOrder", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ login: userLogin, basket })

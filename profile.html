@@ -32,7 +32,7 @@
             const avatarImg = document.getElementById("headerAvatar");
             const authBlock = document.getElementById("authBlock");
             try {
-                const response = await fetch("http://localhost:3000/api/loadInfToProfile", {
+                const response = await fetch("/api/loadInfToProfile", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ login: userLogin })
@@ -155,7 +155,7 @@
             }
             try {
                 const login = localStorage.getItem("userLogin");
-                const response = await fetch("http://localhost:3000/api/loadInfToProfile", {
+                const response = await fetch("/api/loadInfToProfile", {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({login})
@@ -195,7 +195,7 @@
             formData.append("avatar", fileInput.files[0]);
             formData.append("login", login);
             try {
-                const response = await fetch("http://localhost:3000/api/uploadAvatar", {
+                const response = await fetch("/api/uploadAvatar", {
                     method: "POST",
                     body: formData
                 });
@@ -228,7 +228,7 @@
             const login = localStorage.getItem("userLogin");
             const FIO = document.getElementById("FIO").value.trim();
             try{
-                const response = await fetch("http://localhost:3000/api/changeFIO", {
+                const response = await fetch("/api/changeFIO", {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({FIO, login})
@@ -255,7 +255,7 @@
                 return;
             }
             try{
-                const response = await fetch("http://localhost:3000/api/changePhone", {
+                const response = await fetch("/api/changePhone", {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({phone, login})
@@ -278,7 +278,7 @@
             const login = localStorage.getItem("userLogin");
             const newLogin = document.getElementById("login").value;
             try{
-                const response = await fetch("http://localhost:3000/api/changeLogin", {
+                const response = await fetch("/api/changeLogin", {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({newLogin, login})
@@ -303,7 +303,7 @@
             const newPassword = document.getElementById("newPassword").value;
             const oldPassword = document.getElementById("oldPassword").value;
             try{
-                const response = await fetch("http://localhost:3000/api/changePassword", {
+                const response = await fetch("/api/changePassword", {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({newPassword, oldPassword, login})
@@ -335,7 +335,7 @@
             const login = localStorage.getItem("userLogin");
             const userRole = localStorage.getItem("userRole");
             try {
-                const response = await fetch(`http://localhost:3000/api/loadOrders/user?login=${login}`);
+                const response = await fetch(`/api/loadOrders/user?login=${login}`);
                 const data = await response.json();
                 if (!data.success) {
                     console.log(data.message);
@@ -388,7 +388,7 @@
             }
             const login = localStorage.getItem("userLogin");
             try {
-                const response = await fetch(`http://localhost:3000/api/orders/${orderId}`, {
+                const response = await fetch(`/api/orders/${orderId}`, {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ login })
@@ -414,7 +414,7 @@
             }
             if (container.dataset.loaded === "false") {
                 try {
-                    const response = await fetch(`http://localhost:3000/api/orders/${orderId}/items`);
+                    const response = await fetch(`/api/orders/${orderId}/items`);
                     const data = await response.json();
                     if (!data.success || !data.items || data.items.length === 0) {
                         container.innerHTML = "<p style='text-align:center; color:#888; padding:15px;'>Товары не найдены</p>";
@@ -467,7 +467,7 @@
         };
         window.reorder = async (orderId) => {
             try {
-                const response = await fetch(`http://localhost:3000/api/orders/${orderId}/items`);
+                const response = await fetch(`/api/orders/${orderId}/items`);
                 const data = await response.json();
                 if (!data.success || !data.items) {
                     alert("Не удалось загрузить товары заказа");
@@ -534,7 +534,7 @@
                 return;
             }
             try {
-                const response = await fetch("http://localhost:3000/api/reviews", {
+                const response = await fetch("/api/reviews", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
