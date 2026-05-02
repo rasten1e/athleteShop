@@ -1,0 +1,58 @@
+<html lang="ru">
+<head>
+    <title>Вход</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8" name = "viewport" content="width=device-width, initial-scale=1"/>
+</head>
+<body class="BodyAuthorization">
+    <div class="DivLogo">
+        <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
+        <a>ATHLETE</a>
+    </div>
+    <div class="DivAuthorization">
+        <h2>Авторизация</h2>
+        <p style="margin-top: 20px">Логин</p>
+        <input type="text" id="LoginInput">
+        <p>Пароль</p>
+        <input type="password" id="PasswordInput">
+        <button id="LoginBtn">Войти</button>
+        <a href="registration.html">Зарегистрироваться</a>
+    </div>
+    <script>
+        document.getElementById("LoginBtn").addEventListener("click", async () => {
+            const login = document.getElementById("LoginInput").value;
+            const password = document.getElementById("PasswordInput").value;
+
+            if (!login || !password) {
+                alert("Введите логин и пароль");
+                return;
+            }
+            try{
+                const response = await fetch("http://localhost:3000/api/login", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({login, password})
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem("userLogin", data.login);
+                    localStorage.setItem("userRole", data.role);
+                    console.log(data.login);
+                    console.log(data.role || "Роль не сохранена");
+                    alert("Вы вошли под логином: " + data.login);
+                    window.location.href = "index.html";
+                }
+                else{
+                    alert(data.message);
+                }
+            }
+            catch(err){
+                console.error("Ошибка: ", err);
+                alert("Не удалось подключиться к серверу.");
+            }
+        });
+    </script>
+</body>
+</html>

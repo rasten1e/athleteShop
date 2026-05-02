@@ -1,0 +1,237 @@
+<html lang="ru">
+<head>
+    <title>Корзина</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8" name = "viewport" content="width=device-width, initial-scale=1"/>
+</head>
+<header>
+    <div class="DivLogo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+        <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
+        <a>ATHLETE</a>
+    </div>
+    <div class="DivAuth">
+        <img src = "Images/basket.png" alt="КОРЗИНА" onclick="window.location.href='basket.html'" style="cursor: pointer;"/>
+        <div onclick="window.location.href='profile.html'" style="cursor: pointer;">
+            <div>
+                <a style="font-weight: bold">Личный кабинет</a>
+            </div>
+            <div id="authBlock">
+                <a href="authorization.html">Войти</a>
+                <a>|</a>
+                <a href="registration.html">Зарегистрироваться</a>
+            </div>
+        </div>
+        <img id="headerAvatar" src="" alt="Аватар" style="display: none; cursor: pointer" onclick="window.location.href='profile.html'">
+    </div>
+    <script>
+        async function loadHeaderAvatar() {
+            const userLogin = localStorage.getItem("userLogin");
+            if (!userLogin) {
+                return;
+            }
+            const avatarImg = document.getElementById("headerAvatar");
+            const authBlock = document.getElementById("authBlock");
+            try {
+                const response = await fetch("http://localhost:3000/api/loadInfToProfile", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ login: userLogin })
+                });
+                const data = await response.json();
+                if(data.success){
+                    authBlock.innerHTML = `<a>Профиль: ${userLogin}</a>`;
+                    avatarImg.src = data.data.avatar+"?"+Date.now();
+                    avatarImg.style.display = "flex";
+                }
+            } catch (err) {
+                console.log("Ошибка:"+err);
+                authBlock.innerHTML = `<a>Профиль: ${userLogin}</a>`;
+            }
+        }
+        loadHeaderAvatar();
+    </script>
+</header>
+<body>
+<div class="DivNav">
+    <ul class="DivNavMenu">
+        <li><a href="index.html">Главная</a></li>
+        <li>
+            <a href="catalog.html">Каталог</a>
+            <ul class="DivNavSubmenu">
+                <li><a href="catalog.html?category=1">Одежда</a></li>
+                <li><a href="catalog.html?category=2">Обувь</a></li>
+                <li><a href="catalog.html?category=3">Аксессуары</a></li>
+                <li><a href="catalog.html?category=4">Спортивное питание</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="basket.html">Корзина</a>
+        </li>
+        <li>
+            <a href="profile.html">Профиль</a>
+        </li>
+        <li><a href="aboutUs.html">О нас</a></li>
+    </ul>
+    <div class="DivSearch">
+        <form id="searchForm" style="display: flex;">
+            <input type="text" id="InputSearch" placeholder="Поиск товаров...">
+            <button type="submit" id="ButtonSearch"><img src="Images/search.png" alt="Найти"></button>
+        </form>
+    </div>
+    <script>
+        const searchForm = document.getElementById("searchForm");
+        if (searchForm) {
+            searchForm.addEventListener("submit", function(e) {
+                e.preventDefault();
+                const query = document.getElementById("InputSearch").value.trim();
+                if (query === "") {
+                    window.location.href = "catalog.html";
+                } else {
+                    window.location.href = "catalog.html?search=" + encodeURIComponent(query);
+                }
+            });
+        }
+    </script>
+</div>
+    <div class="DivBasketContainer">
+        <div class="DivBasket">
+            <h2>Ваша корзина:</h2>
+            <div id="basketList"></div>
+            <div class="DivBasketTotal">
+                <h2 id="totalPrice">Итого: 0 руб.</h2>
+                <button id="buyBasketBtn">Купить</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function getBasket(){
+            let data = localStorage.getItem("basket");
+            if(data){
+                return JSON.parse(data);
+            }
+            else{
+                return [];
+            }
+        }
+        function saveBasket(basket){
+            localStorage.setItem("basket", JSON.stringify(basket));
+        }
+        function drawBasket(){
+            let basket = getBasket();
+            let list = document.getElementById("basketList");
+            let totalPrice = document.getElementById("totalPrice");
+            list.innerHTML = ``;
+            let totalSum = 0;
+            if (basket.length === 0){
+                list.innerHTML = `<p style="text-align: center">Корзина пуста :(</p>`;
+                totalPrice.textContent = "Итого: 0 руб.";
+                return;
+            }
+            basket.forEach((item, index) => {
+                totalSum += item.price * item.quantity;
+                list.innerHTML += `
+                    <div class="DivBasketItem">
+                    <img src="${item.image}" class="BasketItemImg" alt="${item.name}">
+                    <div class="BasketItemInfo">
+                        <h3>${item.name}</h3>
+                        <p>Размер: <strong>${item.size}</strong></p>
+                        <p>Цена: ${item.price} руб.</p>
+                        <div class="BasketItemBtns">
+                            <button onclick="changeQty(${index}, -1)">−</button>
+                            <span>${item.quantity} шт.</span>
+                            <button onclick="changeQty(${index}, 1)">+</button>
+                            <button onclick="removeItem(${index})" class="RemoveBtn">Удалить</button>
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+            totalPrice.textContent = `Итого: ${totalSum} руб.`;
+        }
+        window.changeQty = (index, change) => {
+            let basket = getBasket();
+            basket[index].quantity += change;
+            if(basket[index].quantity <= 0){
+                basket.splice(index, 1);
+            }
+            saveBasket(basket);
+            drawBasket();
+        };
+        window.removeItem = (index) => {
+            let basket = getBasket();
+            basket.splice(index, 1);
+            saveBasket(basket);
+            drawBasket();
+        };
+        document.getElementById("buyBasketBtn").addEventListener("click", async () => {
+            let userLogin = localStorage.getItem("userLogin");
+            if (!userLogin) {
+                window.location.href = "authorization.html";
+                return;
+            }
+            const basket = getBasket();
+            if (basket.length === 0){
+                alert("Ваша корзина пуста");
+                return;
+            }
+            try{
+                const response = await fetch("http://localhost:3000/api/newOrder", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ login: userLogin, basket })
+                });
+                const result = await response.json();
+                if(result.success){
+                    alert(result.message);
+                    localStorage.removeItem("basket");
+                    drawBasket();
+                }
+                else{
+                    alert("Ошибка: "+result.message);
+                }
+            }
+            catch(err){
+                console.log(err);
+                alert("Проблема соединения с сервером")
+            }
+        });
+        document.addEventListener("DOMContentLoaded", () => {
+            drawBasket();
+        });
+    </script>
+</body>
+<footer>
+    <div class="DivFooter">
+        <div class="DivFooterColumn">
+            <div class="DivLogo">
+                <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
+                <h1 style="color: black">ATHLETE</h1>
+            </div>
+        </div>
+        <div class="DivFooterColumn">
+            <a href="catalog.html">Каталог</a>
+            <a href="catalog.html?category=1">Одежда</a>
+            <a href="catalog.html?category=2">Обувь</a>
+            <a href="catalog.html?category=3">Аксессуары</a>
+            <a href="catalog.html?category=4">Спортивное питание</a>
+        </div>
+        <div class="DivFooterColumn">
+            <a href="index.html">Главная</a>
+            <a href="catalog.html">Каталог</a>
+            <a href="basket.html">Корзина</a>
+            <a href="profile.html">Профиль</a>
+            <a href="aboutUs.html">О нас</a>
+        </div>
+        <div class="DivFooterColumn">
+            <p>Контакты:</p>
+            <ul>
+                <li>Телефон: 8 (921) 064-88-28</li>
+                <li>Email: athlete@gmail.com</li>
+                <li>Прием звонков: Пн-Пт 10:00 - 20:00</li>
+            </ul>
+        </div>
+    </div>
+    <div style="border: 2px solid black"></div>
+    <p style="font-size: 15px; margin: 20px 0">&copy; 2026 Сайт по продаже спортивного инвентаря. Все права защищены.</p>
+</footer>
+</html>

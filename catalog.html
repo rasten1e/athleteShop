@@ -1,0 +1,267 @@
+<html lang="ru">
+<head>
+    <title>Каталог</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8" name = "viewport" content="width=device-width, initial-scale=1"/>
+</head>
+<header>
+    <div class="DivLogo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+        <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
+        <a>ATHLETE</a>
+    </div>
+    <div class="DivAuth">
+        <img src = "Images/basket.png" alt="КОРЗИНА" onclick="window.location.href='basket.html'" style="cursor: pointer;"/>
+        <div onclick="window.location.href='profile.html'" style="cursor: pointer;">
+            <div>
+                <a style="font-weight: bold">Личный кабинет</a>
+            </div>
+            <div id="authBlock">
+                <a href="authorization.html">Войти</a>
+                <a>|</a>
+                <a href="registration.html">Зарегистрироваться</a>
+            </div>
+        </div>
+        <img id="headerAvatar" src="" alt="Аватар" style="display: none; cursor: pointer" onclick="window.location.href='profile.html'">
+    </div>
+    <script>
+        async function loadHeaderAvatar() {
+            const userLogin = localStorage.getItem("userLogin");
+            if (!userLogin) {
+                return;
+            }
+            const avatarImg = document.getElementById("headerAvatar");
+            const authBlock = document.getElementById("authBlock");
+            try {
+                const response = await fetch("http://localhost:3000/api/loadInfToProfile", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ login: userLogin })
+                });
+                const data = await response.json();
+                if(data.success){
+                    authBlock.innerHTML = `<a>Профиль: ${userLogin}</a>`;
+                    avatarImg.src = data.data.avatar+"?"+Date.now();
+                    avatarImg.style.display = "flex";
+                }
+            } catch (err) {
+                console.log("Ошибка:"+err);
+                authBlock.innerHTML = `<a>Профиль: ${userLogin}</a>`;
+            }
+        }
+        loadHeaderAvatar();
+    </script>
+</header>
+<body>
+<div class="DivMainBodyCatalog">
+    <div class="DivNav">
+        <ul class="DivNavMenu">
+            <li><a href="index.html">Главная</a></li>
+            <li>
+                <a href="catalog.html">Каталог</a>
+                <ul class="DivNavSubmenu">
+                    <li><a href="catalog.html?category=1">Одежда</a></li>
+                    <li><a href="catalog.html?category=2">Обувь</a></li>
+                    <li><a href="catalog.html?category=3">Аксессуары</a></li>
+                    <li><a href="catalog.html?category=4">Спортивное питание</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="basket.html">Корзина</a>
+            </li>
+            <li>
+                <a href="profile.html">Профиль</a>
+            </li>
+            <li><a href="aboutUs.html">О нас</a></li>
+        </ul>
+    </div>
+    <div class="DivSearchSortFilter">
+        <div class="DivSearchSection">
+            <div class="DivSearchCatalog">
+                <input type="text" id="searchInput" placeholder="Поиск товаров...">
+                <button id="searchBtn"><img src="Images/search.png" alt="Найти"></button>
+            </div>
+            <div id="DivAdminButton"></div>
+        </div>
+        <div class="DivSortFilterSection">
+            <div class="DivSortSection">
+                <label>Сортировка:</label>
+                <select id="sortSelect">
+                    <option value="">По умолчанию</option>
+                    <option value="asc">Сначала дешевые</option>
+                    <option value="desc">Сначала дорогие</option>
+                </select>
+            </div>
+            <div class="DivFilterSection">
+                <label><strong>Тип товара:</strong></label>
+                <label>
+                    <input type="checkbox" value="1">
+                Одежда</label>
+                <label>
+                    <input type="checkbox" value="2">
+                Обувь</label>
+                <label>
+                    <input type="checkbox" value="3">
+                Аксессуары</label>
+                <label>
+                    <input type="checkbox" value="4">
+                Спортивное питание</label>
+            </div>
+        </div>
+    </div>
+    <div class="DivGridCatalog">
+    </div>
+</div>
+<script>
+    async function loadCatalog(){
+        try{
+            const response = await fetch("http://localhost:3000/api/products");
+            const result = await response.json();
+            if(!result.success){
+                alert("Ошибка: "+result.message);
+                return;
+            }
+            let products = result.products;
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryParam = urlParams.get("category");
+            const searchParam = urlParams.get("search");
+            const searchInput = document.getElementById("searchInput");
+            if (searchParam) {
+                searchInput.value = searchParam;
+            }
+            const searchText = searchInput.value.toLowerCase();
+            if(searchText !== ""){
+                products = products.filter(p => p.name.toLowerCase().includes(searchText));
+            }
+            const checkboxes = document.querySelectorAll(".DivFilterSection input[type='checkbox']");
+            if (categoryParam) {
+                checkboxes.forEach(cb => {
+                    if (cb.value === categoryParam) {
+                        cb.checked = true;
+                    }
+                });
+            }
+            let selectedCategory = [];
+            checkboxes.forEach(cb => {
+                if(cb.checked){
+                    selectedCategory.push(cb.value);
+                }
+            });
+            if(selectedCategory.length > 0){
+                products = products.filter(p => selectedCategory.includes((p.idCategory).toString()));
+            }
+            const sortValue = document.getElementById("sortSelect").value;
+            if(sortValue === "asc"){
+                products.sort((a, b) => a.price - b.price);
+            }
+            else if(sortValue === "desc"){
+                products.sort((a, b) => b.price - a.price);
+            }
+            const grid = document.querySelector(".DivGridCatalog");
+            grid.innerHTML = "";
+            if(products.length === 0){
+                grid.innerHTML = "<p style='text-align: center'>Искомых товаров нету :(</p>";
+                return;
+            }
+            products.forEach(product => {
+                let images = [];
+                if(product.images){
+                    try {
+                        images = JSON.parse(product.images);
+                    }
+                    catch(e) {
+                        images = [];
+                    }
+                }
+                const mainImage = images[0] || "/Images/Products/noImageProduct.png";
+                const productCard = document.createElement("div");
+                productCard.className = "DivGridCatalogCard";
+                productCard.innerHTML = `
+                <a style="text-decoration: none;" href="productCard.html?id=${product.id}">
+                    <img src = "${mainImage}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p style="color: black">${product.price} руб.</p>
+                    <button>Купить</button>
+                </a>
+                `;
+                grid.appendChild(productCard);
+            });
+        }
+        catch(err){
+            console.log("Проблема с загрузкой каталога: ",err);
+            alert("Не удалось загрузить товары");
+        }
+    }
+    document.addEventListener("DOMContentLoaded", ()=> {
+        const DivAdminButton = document.getElementById("DivAdminButton");
+        if(localStorage.getItem("userRole") === "2"){
+            console.log(localStorage.getItem("userRole"));
+            const addButton = document.createElement("button");
+            addButton.className = "AAddProduct";
+            addButton.id = "addProductButton";
+            addButton.textContent = "+ Добавить товар";
+            DivAdminButton.appendChild(addButton);
+            document.getElementById("addProductButton").addEventListener("click", ()=>{
+                location.href = "addProduct.html";
+            });
+        }
+        loadCatalog();
+        document.getElementById("searchBtn").addEventListener("click", function(e) {
+            e.preventDefault();
+            const query = document.getElementById("searchInput").value.trim();
+            if (window.location.search.includes("category=")) {
+                window.history.replaceState({}, "", window.location.href.split("?")[0]);
+            }
+            if (query === "") {
+                window.location.href = "catalog.html";
+            } else {
+                window.location.href = "catalog.html?search=" + query.replace(/ /g, "+");
+            }
+        });
+        document.getElementById("sortSelect").addEventListener("change", loadCatalog);
+        const checkboxes = document.querySelectorAll(".DivFilterSection input[type='checkbox']");
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", ()=>{
+                if (window.location.search.includes("category=")) {
+                    window.history.replaceState({}, "", window.location.href.split("?")[0]);
+                }
+                loadCatalog();
+            });
+        });
+    });
+</script>
+</body>
+<footer>
+    <div class="DivFooter">
+        <div class="DivFooterColumn">
+            <div class="DivLogo">
+                <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
+                <h1 style="color: black">ATHLETE</h1>
+            </div>
+        </div>
+        <div class="DivFooterColumn">
+            <a href="catalog.html">Каталог</a>
+            <a href="catalog.html?category=1">Одежда</a>
+            <a href="catalog.html?category=2">Обувь</a>
+            <a href="catalog.html?category=3">Аксессуары</a>
+            <a href="catalog.html?category=4">Спортивное питание</a>
+        </div>
+        <div class="DivFooterColumn">
+            <a href="index.html">Главная</a>
+            <a href="catalog.html">Каталог</a>
+            <a href="basket.html">Корзина</a>
+            <a href="profile.html">Профиль</a>
+            <a href="aboutUs.html">О нас</a>
+        </div>
+        <div class="DivFooterColumn">
+            <p>Контакты:</p>
+            <ul>
+                <li>Телефон: 8 (921) 064-88-28</li>
+                <li>Email: athlete@gmail.com</li>
+                <li>Прием звонков: Пн-Пт 10:00 - 20:00</li>
+            </ul>
+        </div>
+    </div>
+    <div style="border: 2px solid black"></div>
+    <p style="font-size: 15px; margin: 20px 0">&copy; 2026 Сайт по продаже спортивного инвентаря. Все права защищены.</p>
+</footer>
+</html>

@@ -1,0 +1,166 @@
+<html lang="ru">
+<head>
+    <title>О нас</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8" name = "viewport" content="width=device-width, initial-scale=1"/>
+</head>
+<header>
+    <div class="DivLogo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+        <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
+        <a>ATHLETE</a>
+    </div>
+    <div class="DivAuth">
+        <img src = "Images/basket.png" alt="КОРЗИНА" onclick="window.location.href='basket.html'" style="cursor: pointer;"/>
+        <div onclick="window.location.href='profile.html'" style="cursor: pointer;">
+            <div>
+                <a style="font-weight: bold">Личный кабинет</a>
+            </div>
+            <div id="authBlock">
+                <a href="authorization.html">Войти</a>
+                <a>|</a>
+                <a href="registration.html">Зарегистрироваться</a>
+            </div>
+        </div>
+        <img id="headerAvatar" src="" alt="Аватар" style="display: none; cursor: pointer" onclick="window.location.href='profile.html'">
+    </div>
+    <script>
+        async function loadHeaderAvatar() {
+            const userLogin = localStorage.getItem("userLogin");
+            if (!userLogin) {
+                return;
+            }
+            const avatarImg = document.getElementById("headerAvatar");
+            const authBlock = document.getElementById("authBlock");
+            try {
+                const response = await fetch("http://localhost:3000/api/loadInfToProfile", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ login: userLogin })
+                });
+                const data = await response.json();
+                if(data.success){
+                    authBlock.innerHTML = `<a>Профиль: ${userLogin}</a>`;
+                    avatarImg.src = data.data.avatar+"?"+Date.now();
+                    avatarImg.style.display = "flex";
+                }
+            } catch (err) {
+                console.log("Ошибка:"+err);
+                authBlock.innerHTML = `<a>Профиль: ${userLogin}</a>`;
+            }
+        }
+        loadHeaderAvatar();
+    </script>
+</header>
+<body>
+<div class="DivNav">
+    <ul class="DivNavMenu">
+        <li><a href="index.html">Главная</a></li>
+        <li>
+            <a href="catalog.html">Каталог</a>
+            <ul class="DivNavSubmenu">
+                <li><a href="catalog.html?category=1">Одежда</a></li>
+                <li><a href="catalog.html?category=2">Обувь</a></li>
+                <li><a href="catalog.html?category=3">Аксессуары</a></li>
+                <li><a href="catalog.html?category=4">Спортивное питание</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="basket.html">Корзина</a>
+        </li>
+        <li>
+            <a href="profile.html">Профиль</a>
+        </li>
+        <li><a href="aboutUs.html">О нас</a></li>
+    </ul>
+    <div class="DivSearch">
+        <form id="searchForm" style="display: flex;">
+            <input type="text" id="InputSearch" placeholder="Поиск товаров...">
+            <button type="submit" id="ButtonSearch"><img src="Images/search.png" alt="Найти"></button>
+        </form>
+    </div>
+    <script>
+        const searchForm = document.getElementById("searchForm");
+        if (searchForm) {
+            searchForm.addEventListener("submit", function(e) {
+                e.preventDefault();
+                const query = document.getElementById("InputSearch").value.trim();
+                if (query === "") {
+                    window.location.href = "catalog.html";
+                } else {
+                    window.location.href = "catalog.html?search=" + encodeURIComponent(query);
+                }
+            });
+        }
+    </script>
+</div>
+    <div class="DivTextAboutUs">
+        <div class="DivTextAboutUsSection">
+            <div class="DivBigLogo">
+                <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
+                <a>ATHLETE</a>
+            </div>
+            <h2>Как все начиналось</h2>
+            <p>Все началось с простой идеи: спортивная экипировка не должна быть либо слишком дорогой, либо слишком низкого качества. В 2026 году мы решили создать магазин, в котором каждый найдет то, что ему нужно — для утренних пробежек, тренировок в зале или просто для активного образа жизни.</p>
+            <p>Мы не гонимся за миллионами продаж. Нам важно, чтобы каждый наш клиент остался доволен. Пока нас мало, но мы растем каждый день. И каждый новый покупатель — для нас не просто чек, а человек, которому мы хотим помочь стать лучше, сильнее, увереннее.</p>
+        </div>
+        <div class="DivTextAboutUsSection">
+            <h2>Почему спорт?</h2>
+            <p>Мы сами любим спорт. Кто-то из нас бегает по утрам, кто-то занимается в зале, а кто-то играет в футбол по выходным. Мы знаем, как важно иметь качественную форму, которая не развалится после первой стирки, и обувь, в которой действительно комфортно.</p>
+            <p>Мы устали от магазинов, где продают подделку под видом оригинала, или где цены завышены в два раза просто за красивое название. Поэтому мы решили делать иначе: честно, прозрачно и с душой.</p>
+            <p>ATHLETE — это не просто название. Это состояние души. Это про движение, про преодоление себя, про желание становиться лучше каждый день.</p>
+        </div>
+        <div class="DivTextAboutUsSection">
+            <h2>Что у нас можно найти</h2>
+            <p>Мы собираем для вас только то, в чем уверены сами. Наш ассортимент пока небольшой — мы не хотим распыляться. Лучше пусть будет 10 действительно хороших товаров, чем 100 посредственных.</p>
+            <ul class="about-list">
+                <li><strong>Одежда</strong> — все из дышащих материалов, которые не жмут и не растягиваются после первой носки.</li>
+                <li><strong>Обувь</strong> — кроссовки для бега, тренировок и повседневной носки. Мы проверяем каждую пару на удобство.</li>
+                <li><strong>Аксессуары</strong> — рюкзаки, бутылки для воды и прочее, что делает тренировки комфортнее.</li>
+                <li><strong>Спортивные добавки</strong> — проверенные и безопасные добавки, такие как: гейнер, протеин, аминокислоты и витамины, которые помогут как на тренировках, так и укрепить здоровье.</li>
+            </ul>
+            <p>И главное: мы не продаем то, что сами бы не купили. Каждый товар перед появлением на сайте мы тестируем на себе. Потому что по-другому нельзя.</p>
+        </div>
+        <div class="DivTextAboutUsSection">
+            <h2>Будем на связи</h2>
+            <p>Если хотите что-то спросить или предложить — мы всегда открыты.</p>
+            <p><strong>Email:</strong> athlete@gmail.com</p>
+            <p><strong>Телефон:</strong> 8 (921) 064-88-28</p>
+            <p><strong>Режим работы:</strong> Пн–Пт: 10:00–20:00, Сб–Вс: выходной (но на почту отвечаем всегда)</p>
+        </div>
+    </div>
+</body>
+<footer>
+    <div class="DivFooter">
+        <div class="DivFooterColumn">
+            <div class="DivLogo">
+                <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
+                <h1 style="color: black">ATHLETE</h1>
+            </div>
+        </div>
+        <div class="DivFooterColumn">
+            <a href="catalog.html">Каталог</a>
+            <a href="catalog.html?category=1">Одежда</a>
+            <a href="catalog.html?category=2">Обувь</a>
+            <a href="catalog.html?category=3">Аксессуары</a>
+            <a href="catalog.html?category=4">Спортивное питание</a>
+        </div>
+        <div class="DivFooterColumn">
+            <a href="index.html">Главная</a>
+            <a href="catalog.html">Каталог</a>
+            <a href="basket.html">Корзина</a>
+            <a href="profile.html">Профиль</a>
+            <a href="aboutUs.html">О нас</a>
+        </div>
+        <div class="DivFooterColumn">
+            <p>Контакты:</p>
+            <ul>
+                <li>Телефон: 8 (921) 064-88-28</li>
+                <li>Email: athlete@gmail.com</li>
+                <li>Прием звонков: Пн-Пт 10:00 - 20:00</li>
+            </ul>
+        </div>
+    </div>
+    <div style="border: 2px solid black"></div>
+    <p style="font-size: 15px; margin: 20px 0">&copy; 2026 Сайт по продаже спортивного инвентаря. Все права защищены.</p>
+</footer>
+</html>

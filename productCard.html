@@ -1,0 +1,393 @@
+<html lang="ru">
+<head>
+    <title>Товар</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8" name = "viewport" content="width=device-width, initial-scale=1"/>
+</head>
+<header>
+    <div class="DivLogo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+        <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
+        <a>ATHLETE</a>
+    </div>
+    <div class="DivAuth">
+        <img src = "Images/basket.png" alt="КОРЗИНА" onclick="window.location.href='basket.html'" style="cursor: pointer;"/>
+        <div onclick="window.location.href='profile.html'" style="cursor: pointer;">
+            <div>
+                <a style="font-weight: bold">Личный кабинет</a>
+            </div>
+            <div id="authBlock">
+                <a href="authorization.html">Войти</a>
+                <a>|</a>
+                <a href="registration.html">Зарегистрироваться</a>
+            </div>
+        </div>
+        <img id="headerAvatar" src="" alt="Аватар" style="display: none; cursor: pointer" onclick="window.location.href='profile.html'">
+    </div>
+    <script>
+        async function loadHeaderAvatar() {
+            const userLogin = localStorage.getItem("userLogin");
+            if (!userLogin) {
+                return;
+            }
+            const avatarImg = document.getElementById("headerAvatar");
+            const authBlock = document.getElementById("authBlock");
+            try {
+                const response = await fetch("http://localhost:3000/api/loadInfToProfile", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ login: userLogin })
+                });
+                const data = await response.json();
+                if(data.success){
+                    authBlock.innerHTML = `<a>Профиль: ${userLogin}</a>`;
+                    avatarImg.src = data.data.avatar+"?"+Date.now();
+                    avatarImg.style.display = "flex";
+                }
+            } catch (err) {
+                console.log("Ошибка:"+err);
+                authBlock.innerHTML = `<a>Профиль: ${userLogin}</a>`;
+            }
+        }
+        loadHeaderAvatar();
+    </script>
+</header>
+<body>
+<div class="DivNav">
+    <ul class="DivNavMenu">
+        <li><a href="index.html">Главная</a></li>
+        <li>
+            <a href="catalog.html">Каталог</a>
+            <ul class="DivNavSubmenu">
+                <li><a href="catalog.html?category=1">Одежда</a></li>
+                <li><a href="catalog.html?category=2">Обувь</a></li>
+                <li><a href="catalog.html?category=3">Аксессуары</a></li>
+                <li><a href="catalog.html?category=4">Спортивное питание</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="basket.html">Корзина</a>
+        </li>
+        <li>
+            <a href="profile.html">Профиль</a>
+        </li>
+        <li><a href="aboutUs.html">О нас</a></li>
+    </ul>
+    <div class="DivSearch">
+        <form id="searchForm" style="display: flex;">
+            <input type="text" id="InputSearch" placeholder="Поиск товаров...">
+            <button type="submit" id="ButtonSearch"><img src="Images/search.png" alt="Найти"></button>
+        </form>
+    </div>
+    <script>
+        const searchForm = document.getElementById("searchForm");
+        if (searchForm) {
+            searchForm.addEventListener("submit", function(e) {
+                e.preventDefault();
+                const query = document.getElementById("InputSearch").value.trim();
+                if (query === "") {
+                    window.location.href = "catalog.html";
+                } else {
+                    window.location.href = "catalog.html?search=" + encodeURIComponent(query);
+                }
+            });
+        }
+    </script>
+</div>
+    <div class="BodyProductCard">
+        <div class="DivColumnsProductCard">
+            <div class="DivColumnsProductCardSection">
+                <div class="ProductGallery">
+                    <img id="imageProduct" src="" alt="Фото товара">
+                    <div id="thumbnailsBox"></div>
+                </div>
+                <h3 id="nameProduct"></h3>
+                <div id="ratingProduct"></div>
+                <p id="priceProduct" class="PPriceProduct"></p>
+                <div id="sizesProduct"></div>
+                <button id="buyProduct">В корзину</button>
+                <div id="adminBtns">
+
+                </div>
+            </div>
+            <div class="DivColumnsProductCardSection">
+                <h3 style="margin-bottom: 15px">Описание товара</h3>
+                <p id="descriptionProduct"></p>
+            </div>
+        </div>
+        <div class="DivReviews">
+            <h3>Отзывы <i id="reviewsCount" style="font-style: normal; color: #666; font-size: 16px;"></i></h3>
+            <p id="avgRating" style="font-size: 24px; margin: 10px 0;"></p>
+            <div id="reviewsList"></div>
+        </div>
+    </div>
+    <div id="imageModal" class="DivImageModal">
+        <span class="SpanModalClose">&times</span>
+        <img id="bigImageModal" src="" alt="Фото товара">
+    </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get("id");
+        let product = null;
+        let mainImg = null;
+        document.addEventListener("DOMContentLoaded", async() => {
+            try{
+                const response = await fetch("http://localhost:3000/api/products");
+                const data = await response.json();
+                const products = data.products || [];
+                products.forEach(p => {
+                    if(p.id.toString() === productId.toString()) {
+                        product = p;
+                    }
+                });
+                if (!product) {
+                    document.querySelector(".BodyProductCard").innerHTML = `
+                        <div style="text-align: center; padding: 50px; color: #333;">
+                            <h2>Данного товара нет в наличии :(</h2>
+                            <p style="margin: 20px 0;">
+                                <a href="catalog.html" style="color: darkred; text-decoration: none; font-weight: 500;">
+                                    <- Вернуться в каталог
+                                </a>
+                            </p>
+                        </div>
+                    `;
+                    return;
+                }
+                mainImg = document.getElementById("imageProduct");
+                const thumbsBox = document.getElementById("thumbnailsBox");
+                const modal = document.getElementById("imageModal");
+                const modalImg = document.getElementById("bigImageModal");
+                const closeBtn = document.querySelector(".SpanModalClose");
+                document.getElementById("nameProduct").textContent = product.name;
+                document.getElementById("priceProduct").textContent = product.price+" руб.";
+                document.getElementById("descriptionProduct").textContent = product.description || "У этого товара отсутствует описание.";
+                let images = [];
+                if(product.images){
+                    try{
+                        images = JSON.parse(product.images);
+                    }
+                    catch(err){
+                        images = [];
+                    }
+                }
+                const firstImage = images[0] || "Images/Products/noImageProduct.png";
+                mainImg.src = firstImage;
+                if(images.length > 1){
+                    images.forEach(img => {
+                        const thumb = document.createElement("img");
+                        thumb.src = img;
+                        thumb.className = "ImgThumb";
+                        thumb.addEventListener("click", () => {
+                            mainImg.src = img;
+                        });
+                        thumbsBox.appendChild(thumb);
+                    });
+                }
+                let sizes = [];
+                if(product.sizes){
+                    try{
+                        sizes = JSON.parse(product.sizes);
+                    }
+                    catch(err){
+                        sizes = [];
+                    }
+                }
+                else {
+                }
+                if(sizes.length > 0){
+                    let sizesHTML = "<h4 style='color: #222222; margin: 10px 0; font-size: 20px'>Доступные размеры:</h4>";
+                    sizes.forEach(size => {
+                        sizesHTML += `<label style=" cursor:pointer; display: flex; flex-direction: row; align-items: center;">
+                                        <input type="radio" name="productSize" value="${size}" style="margin-right: 5px;">${size}</input>
+                                     </label>`;
+                    });
+                    document.getElementById("sizesProduct").innerHTML = sizesHTML;
+                }
+
+                mainImg.addEventListener("click", () => {
+                    openModal(mainImg.src);
+                });
+                const openModal = (src) => {
+                    modalImg.src = src;
+                    modal.classList.add("show");
+                };
+                closeBtn.addEventListener("click", () => {
+                    modal.classList.remove("show")
+                });
+                modal.addEventListener("click", (e) => {
+                    if(e.target === modal){
+                        modal.classList.remove("show");
+                    }
+                });
+            }
+            catch(err){
+                console.log("Ошибка загрузки: "+err);
+                alert("Не удалось загрузить товар");
+            }
+            const userRole = localStorage.getItem("userRole");
+            const adminContainer = document.getElementById("adminBtns");
+            if(userRole === "2" && productId){
+                let buttonsHTML = `
+                <a href="editProduct.html?id=${productId}" class="AdminBtnsEditBtn">Редактировать</a>
+                <button id="deleteBtn" class="AdminBtnsEditBtn">Удалить</button>
+                `;
+                adminContainer.innerHTML = buttonsHTML;
+                document.getElementById("deleteBtn").addEventListener("click", async () => {
+                    if(!confirm("Вы действительно хотите удалить товар?")){
+                        return;
+                    }
+                    try{
+                        const response = await fetch(`http://localhost:3000/api/products/${productId}`, {
+                            method: "DELETE"
+                        });
+                        const result = await response.json();
+                        if(result.success){
+                            alert(result.message);
+                            window.location.href = "catalog.html";
+                        }
+                        else{
+                            alert("Ошибка: "+result.message);
+                        }
+                    }
+                    catch(err){
+                        console.log(err);
+                        alert("Проблемы с сервером");
+                    }
+                });
+            }
+            loadProductReviews(productId);
+        });
+        document.getElementById("buyProduct").addEventListener("click", () => {
+            const selectedSize = document.querySelector("input[name='productSize']:checked");
+            if(!selectedSize){
+                alert("Выберите хотя бы один размер");
+                return;
+            }
+            const basketProduct = {
+                id: productId,
+                name: product.name,
+                price: product.price,
+                image: mainImg.src,
+                size: selectedSize.value,
+                quantity: 1
+            };
+            let basket = JSON.parse(localStorage.getItem("basket")) || [];
+            let foundIndex = -1;
+            for (let i = 0; i < basket.length; i++) {
+                if (basket[i].id === basketProduct.id && basket[i].size === basketProduct.size) {
+                    foundIndex = i;
+                    break;
+                }
+            }
+            if (foundIndex !== -1) {
+                basket[foundIndex].quantity += 1;
+            } else {
+                basket.push(basketProduct);
+            }
+            localStorage.setItem("basket", JSON.stringify(basket));
+            console.log(localStorage.getItem("basket"));
+            alert("Товар добавлен в корзину");
+        });
+        async function loadProductReviews(productId) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/products/${productId}/reviews`);
+                const data = await response.json();
+                if (data.success) {
+                    document.getElementById("avgRating").textContent = "★ "+data.avgRating +" из 5";
+                    document.getElementById("reviewsCount").textContent = "("+data.count+")";
+                    const list = document.getElementById("reviewsList");
+                    if (data.reviews.length === 0) {
+                        list.innerHTML = "<p style='color: #333;'>Пока нет отзывов :(</p>";
+                        return;
+                    }
+                    const userRole = localStorage.getItem("userRole");
+                    let html = "";
+                    data.reviews.forEach(r => {
+                        let avatar = "Images/UserImages/defaultAvatar.png";
+                        if (r.avatar) {
+                            avatar = r.avatar;
+                        }
+                        let deleteBtn = "";
+                        if(userRole === "2"){
+                            deleteBtn = `<button onclick="deleteReview(${r.idReview})" class="BtnDeleteReview">Удалить</button>`;
+                        }
+                        html += `
+                            <div class="DivReviewSection">
+                                <div style="display: flex; flex-direction: row; align-items: center; margin-bottom: 10px;">
+                                    <img src="${avatar}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                                    <div style="display: flex; flex-direction: column; margin-left: 10px">
+                                        <strong>${r.FIO}</strong>
+                                        <p style="color: #f39c12; font-size: 25px;">${"★".repeat(r.rating)}${"☆".repeat(5-r.rating)}</p>
+                                    </div>
+                                </div>
+                                <p >${r.comment}</p>
+                                <small style="color: #555;">${new Date(r.createdAt).toLocaleDateString()}</small>
+                                ${deleteBtn}
+                            </div>
+                        `;
+                    });
+                    list.innerHTML = html;
+                }
+            } catch (err) {
+                console.log("Ошибка загрузки отзывов:", err);
+            }
+        }
+        window.deleteReview = async function(reviewId) {
+            if (!confirm("Удалить этот отзыв?")) {
+                return;
+            }
+            const login = localStorage.getItem("userLogin");
+            try {
+                const response = await fetch(`http://localhost:3000/api/reviews/${reviewId}`, {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ login: login })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert(data.message);
+                    const id = new URLSearchParams(window.location.search).get("id");
+                    loadProductReviews(id);
+                } else {
+                    alert("Ошибка: " + data.message);
+                }
+            } catch (err) {
+                alert("Проблемы с сервером");
+            }
+        };
+    </script>
+</body>
+<footer>
+    <div class="DivFooter">
+        <div class="DivFooterColumn">
+            <div class="DivLogo">
+                <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
+                <h1 style="color: black">ATHLETE</h1>
+            </div>
+        </div>
+        <div class="DivFooterColumn">
+            <a href="catalog.html">Каталог</a>
+            <a href="catalog.html?category=1">Одежда</a>
+            <a href="catalog.html?category=2">Обувь</a>
+            <a href="catalog.html?category=3">Аксессуары</a>
+            <a href="catalog.html?category=4">Спортивное питание</a>
+        </div>
+        <div class="DivFooterColumn">
+            <a href="index.html">Главная</a>
+            <a href="catalog.html">Каталог</a>
+            <a href="basket.html">Корзина</a>
+            <a href="profile.html">Профиль</a>
+            <a href="aboutUs.html">О нас</a>
+        </div>
+        <div class="DivFooterColumn">
+            <p>Контакты:</p>
+            <ul>
+                <li>Телефон: 8 (921) 064-88-28</li>
+                <li>Email: athlete@gmail.com</li>
+                <li>Прием звонков: Пн-Пт 10:00 - 20:00</li>
+            </ul>
+        </div>
+    </div>
+    <div style="border: 2px solid black"></div>
+    <p style="font-size: 15px; margin: 20px 0">&copy; 2026 Сайт по продаже спортивного инвентаря. Все права защищены.</p>
+</footer>
+</html>

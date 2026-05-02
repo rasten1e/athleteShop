@@ -1,0 +1,343 @@
+<html lang="ru">
+<head>
+    <title>Все заказы</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8" name = "viewport" content="width=device-width, initial-scale=1"/>
+</head>
+<header>
+    <div class="DivLogo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+        <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
+        <a>ATHLETE</a>
+    </div>
+    <div class="DivAuth">
+        <img src = "Images/basket.png" alt="КОРЗИНА" onclick="window.location.href='basket.html'" style="cursor: pointer;"/>
+        <div onclick="window.location.href='profile.html'" style="cursor: pointer;">
+            <div>
+                <a style="font-weight: bold">Личный кабинет</a>
+            </div>
+            <div id="authBlock">
+                <a href="authorization.html">Войти</a>
+                <a>|</a>
+                <a href="registration.html">Зарегистрироваться</a>
+            </div>
+        </div>
+        <img id="headerAvatar" src="" alt="Аватар" style="display: none; cursor: pointer" onclick="window.location.href='profile.html'">
+    </div>
+    <script>
+        async function loadHeaderAvatar() {
+            const userLogin = localStorage.getItem("userLogin");
+            if (!userLogin) {
+                return;
+            }
+            const avatarImg = document.getElementById("headerAvatar");
+            const authBlock = document.getElementById("authBlock");
+            try {
+                const response = await fetch("http://localhost:3000/api/loadInfToProfile", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ login: userLogin })
+                });
+                const data = await response.json();
+                if(data.success){
+                    authBlock.innerHTML = `<a>Профиль: ${userLogin}</a>`;
+                    avatarImg.src = data.data.avatar+"?"+Date.now();
+                    avatarImg.style.display = "flex";
+                }
+            } catch (err) {
+                console.log("Ошибка:"+err);
+                authBlock.innerHTML = `<a>Профиль: ${userLogin}</a>`;
+            }
+        }
+        loadHeaderAvatar();
+    </script>
+</header>
+<body>
+    <div class="DivMainBodyAdminOrders">
+        <div class="DivNav">
+            <ul class="DivNavMenu">
+                <li><a href="index.html">Главная</a></li>
+                <li>
+                    <a href="catalog.html">Каталог</a>
+                    <ul class="DivNavSubmenu">
+                        <li><a href="catalog.html?category=1">Одежда</a></li>
+                        <li><a href="catalog.html?category=2">Обувь</a></li>
+                        <li><a href="catalog.html?category=3">Аксессуары</a></li>
+                        <li><a href="catalog.html?category=4">Спортивное питание</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="basket.html">Корзина</a>
+                </li>
+                <li>
+                    <a href="profile.html">Профиль</a>
+                </li>
+                <li><a href="aboutUs.html">О нас</a></li>
+            </ul>
+            <div class="DivSearch">
+                <form id="searchForm" style="display: flex;">
+                    <input type="text" id="InputSearch" placeholder="Поиск товаров...">
+                    <button type="submit" id="ButtonSearch"><img src="Images/search.png" alt="Найти"></button>
+                </form>
+            </div>
+            <script>
+                const searchForm = document.getElementById("searchForm");
+                if (searchForm) {
+                    searchForm.addEventListener("submit", function(e) {
+                        e.preventDefault();
+                        const query = document.getElementById("InputSearch").value.trim();
+                        if (query === "") {
+                            window.location.href = "catalog.html";
+                        } else {
+                            window.location.href = "catalog.html?search=" + encodeURIComponent(query);
+                        }
+                    });
+                }
+            </script>
+        </div>
+        <div class="DivAdminOrders">
+            <h2> Управление заказами</h2>
+            <div class="DivControls">
+                <label>Фильтр по статусу:
+                    <select id="statusFilter">
+                        <option value="all">Все</option>
+                        <option value="принят">Принят</option>
+                        <option value="отправлен">Отправлен</option>
+                        <option value="получен">Получен</option>
+                    </select>
+                </label>
+                <label>Сортировка по дате:
+                    <select id="dateSort">
+                        <option value="asc">Сначала новые</option>
+                        <option value="desc">Сначала старые</option>
+                    </select>
+                </label>
+            </div>
+            <div id="adminOrdersList"></div>
+        </div>
+    </div>
+    <script>
+        let allOrders = [];
+        async function loadOrders() {
+            const login = localStorage.getItem("userLogin");
+            const list = document.getElementById("adminOrdersList");
+            list.innerHTML = "";
+            try {
+                const response = await fetch(`http://localhost:3000/api/loadOrders/admin`);
+                const data = await response.json();
+                if (data.success) {
+                    allOrders = data.orders;
+                    drawOrders();
+                } else {
+                    alert(data.message);
+                }
+            } catch (err) {
+                console.log(err);
+                alert("Ошибка сервера");
+            }
+        }
+        function drawOrders() {
+            const filterStatus = document.getElementById("statusFilter").value;
+            const sortType = document.getElementById("dateSort").value;
+            const list = document.getElementById("adminOrdersList");
+            list.innerHTML = "";
+            let filtered = allOrders;
+            if (filterStatus !== "all") {
+                filtered = [];
+                allOrders.forEach(order => {
+                    if (order.status === filterStatus) {
+                        filtered.push(order);
+                    }
+                });
+            }
+            if (sortType === "asc") {
+                filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            } else if (sortType === "desc") {
+                filtered.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+            }
+            if (filtered.length === 0) {
+                list.innerHTML = "<p style='text-align:center; margin:20px; color:#333;'>Заказов не найдено</p>";
+                return;
+            }
+            filtered.forEach(order => {
+                // Подготовка selected через простые if
+                let selected1 = "";
+                let selected2 = "";
+                let selected3 = "";
+                if (order.status === "принят") selected1 = "selected";
+                if (order.status === "отправлен") selected2 = "selected";
+                if (order.status === "получен") selected3 = "selected";
+
+                list.innerHTML += `
+                    <div class="DivOrderCard admin-order" id="card-${order.idOrder}">
+                        <div class="DivOrderHeader">
+                            <p>Заказ #${order.idOrder}</p>
+                            <p class="POrderStatus status-${order.status}" id="status-${order.idOrder}">${order.status}</p>
+                        </div>
+                        <p><strong>ФИО заказчика:</strong> ${order.userFIO}</p>
+                        <p><strong>Телефон заказчика:</strong> ${order.userPhone}</p>
+                        <p>Дата: ${new Date(order.createdAt).toLocaleDateString()}</p>
+                        <p>Сумма: <strong>${order.totalAmount} руб.</strong></p>
+                        <div class="DivOrderActions">
+                            <button class="BtnToggleItems" id="btnToggle-${order.idOrder}">Показать товары v</button>
+                            <button class="BtnDeleteOrder" id="btnDelete-${order.idOrder}">Удалить заказ</button>
+                        </div>
+                        <div class="DivOrderItems" id="orderItems-${order.idOrder}" style="display: none;"></div>
+                        <div class="DivStatusChange">
+                            <label>Изменить статус:</label>
+                            <select class="SelectStatus" id="select-${order.idOrder}">
+                                <option value="принят" ${selected1}>принят</option>
+                                <option value="отправлен" ${selected2}>отправлен</option>
+                                <option value="получен" ${selected3}>получен</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+            });
+            filtered.forEach(order => {
+                const toggleBtn = document.getElementById(`btnToggle-${order.idOrder}`);
+                if (toggleBtn) {
+                    toggleBtn.addEventListener("click", function() {
+                        toggleOrderItems(order.idOrder);
+                    });
+                }
+                const deleteBtn = document.getElementById(`btnDelete-${order.idOrder}`);
+                if (deleteBtn) {
+                    deleteBtn.addEventListener("click", function() {
+                        deleteAdminOrder(order.idOrder);
+                    });
+                }
+                const select = document.getElementById(`select-${order.idOrder}`);
+                if (select) {
+                    select.addEventListener("change", function() {
+                        const newStatus = select.value;
+                        changeOrderStatus(order.idOrder, newStatus);
+                    });
+                }
+            });
+        }
+        window.changeOrderStatus = async (orderId, newStatus) => {
+            const login = localStorage.getItem("userLogin");
+            try {
+                const response = await fetch(`http://localhost:3000/api/orders/${orderId}/status`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ login, status: newStatus })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    const statusLabel = document.getElementById(`status-${orderId}`);
+                    statusLabel.textContent = newStatus;
+                    statusLabel.className = `POrderStatus status-${newStatus}`;
+                } else {
+                    alert("Ошибка: "+data.message);
+                }
+            } catch (err) {
+                console.log(err);
+                alert("Ошибка сервера");
+            }
+        };
+        window.toggleOrderItems = async (orderId) => {
+            const container = document.getElementById(`orderItems-${orderId}`);
+            const btn = document.getElementById(`btnToggle-${orderId}`);
+            if (container.style.display !== "none") {
+                container.style.display = "none";
+                btn.innerHTML = "Показать товары v";
+                return;
+            }
+            if (container.innerHTML === "") {
+                container.style.display = "block";
+                try {
+                    const response = await fetch(`http://localhost:3000/api/orders/${orderId}/items`);
+                    const data = await response.json();
+                    if (!data.success || !data.items || data.items.length === 0) {
+                        container.innerHTML = "<p style='text-align:center; color:#888; padding:15px;'>Товары не найдены</p>";
+                        return;
+                    }
+                    let html = "<div class='OrderItemsList'>";
+                    data.items.forEach(item => {
+                        html += `
+                            <div class="OrderItemRow">
+                                <img src="${item.image}" class="OrderItemImg" alt="${item.name}">
+                                <div class="OrderItemInfo">
+                                    <strong>${item.name}</strong>
+                                    <p>Размер: ${item.size} | ${item.price} руб. x ${item.quantity} шт.</p>
+                                </div>
+                                <p class="OrderItemTotal">${item.price * item.quantity} руб.</p>
+                            </div>
+                        `;
+                    });
+                    html += "</div>";
+                    container.innerHTML = html;
+
+                } catch (err) {
+                    console.log("Ошибка загрузки товаров:", err);
+                    alert("Ошибка загрузки");
+                }
+            } else {
+                container.style.display = "block";
+            }
+            btn.innerHTML = "Скрыть товары ^";
+        };
+        window.deleteAdminOrder = async (orderId) => {
+            if (!confirm("Вы уверены, что хотите удалить этот заказ?")) {
+                return;
+            }
+            const login = localStorage.getItem("userLogin");
+            try {
+                const response = await fetch(`http://localhost:3000/api/orders/${orderId}`, {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ login: login })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert("Заказ удалён");
+                    loadOrders();
+                } else {
+                    alert("Ошибка: " + data.message);
+                }
+            } catch (err) {
+                console.log(err);
+                alert("Проблемы с сервером");
+            }
+        };
+        document.getElementById("statusFilter").addEventListener("change", drawOrders);
+        document.getElementById("dateSort").addEventListener("change", drawOrders);
+        document.addEventListener("DOMContentLoaded", loadOrders);
+    </script>
+</body>
+<footer>
+    <div class="DivFooter">
+        <div class="DivFooterColumn">
+            <div class="DivLogo">
+                <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
+                <h1 style="color: black">ATHLETE</h1>
+            </div>
+        </div>
+        <div class="DivFooterColumn">
+            <a href="catalog.html">Каталог</a>
+            <a href="catalog.html?category=1">Одежда</a>
+            <a href="catalog.html?category=2">Обувь</a>
+            <a href="catalog.html?category=3">Аксессуары</a>
+            <a href="catalog.html?category=4">Спортивное питание</a>
+        </div>
+        <div class="DivFooterColumn">
+            <a href="index.html">Главная</a>
+            <a href="catalog.html">Каталог</a>
+            <a href="basket.html">Корзина</a>
+            <a href="profile.html">Профиль</a>
+            <a href="aboutUs.html">О нас</a>
+        </div>
+        <div class="DivFooterColumn">
+            <p>Контакты:</p>
+            <ul>
+                <li>Телефон: 8 (921) 064-88-28</li>
+                <li>Email: athlete@gmail.com</li>
+                <li>Прием звонков: Пн-Пт 10:00 - 20:00</li>
+            </ul>
+        </div>
+    </div>
+    <div style="border: 2px solid black"></div>
+    <p style="font-size: 15px; margin: 20px 0">&copy; 2026 Сайт по продаже спортивного инвентаря. Все права защищены.</p>
+</footer>
+</html>

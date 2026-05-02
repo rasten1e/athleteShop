@@ -1,0 +1,71 @@
+<html lang="ru">
+<head>
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8" name = "viewport" content="width=device-width, initial-scale=1"/>
+</head>
+<body class="BodyRegistration">
+    <div class="DivLogo">
+        <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
+        <a>ATHLETE</a>
+    </div>
+    <form id="regForm" class="DivRegistration">
+        <h2>Регистрация</h2>
+        <p style="margin-top: 20px" >ФИО</p>
+        <input id="FIO" type="text" required>
+        <p>Телефон</p>
+        <input id="phone" type="tel" placeholder="79009009090" maxlength="11" required>
+        <p>Логин</p>
+        <input id="login" type="text" minlength="8" maxlength="24" required>
+        <p>Пароль</p>
+        <input id="password" type="password" minlength="8" maxlength="24" required>
+        <p>Пароль повторно</p>
+        <input id="passwordAgain" type="password" maxlength="24" required>
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+    <script>
+        const phoneInput = document.getElementById("phone");
+        phoneInput.addEventListener("input", (e) => {
+            e.target.value = e.target.value.replace(/[^0-9]/g, "");
+        });
+        document.getElementById("regForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const FIO = document.getElementById("FIO").value.trim();
+            const phone = phoneInput.value;
+            const login = document.getElementById("login").value.trim();
+            const password = document.getElementById("password").value;
+            const passwordAgain = document.getElementById("passwordAgain").value;
+            if(phone.length !== 11 || !phone.startsWith("7")) {
+                return alert("Телефон должен содержать 11 цифр и начинаться с 7");
+            }
+            if(!/[A-ZА-Я]/.test(password)){
+                return alert("Пароль должен содержать хотя бы одну ЗАГЛАВНУЮ букву");
+            }
+            if(!/[0-9]/.test(password)){
+                return alert("Пароль должен содержать хотя бы одну цифру");
+            }
+            if(password !== passwordAgain){
+                return alert("Пароли не совпадают");
+            }
+            try{
+                const response = await fetch("http://localhost:3000/api/register", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({FIO, phone, login, password})
+                });
+                const data = await response.json();
+                if(data.success){
+                    alert(data.message);
+                    window.location.href = "authorization.html";
+                }
+                else{
+                    alert("Ошибка: "+data.message);
+                }
+            }
+            catch(err){
+                alert("Ошибка соединения: "+err.message);
+            }
+        });
+    </script>
+</body>
+</html>

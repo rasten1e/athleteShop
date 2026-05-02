@@ -1,0 +1,206 @@
+<html lang="ru">
+<head>
+    <title>Главная</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8" name = "viewport" content="width=device-width, initial-scale=1"/>
+</head>
+<header>
+    <div class="DivLogo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+        <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
+        <a>ATHLETE</a>
+    </div>
+    <div class="DivAuth">
+        <img src = "Images/basket.png" alt="КОРЗИНА" onclick="window.location.href='basket.html'" style="cursor: pointer;"/>
+        <div onclick="window.location.href='profile.html'" style="cursor: pointer;">
+            <div>
+                <a style="font-weight: bold">Личный кабинет</a>
+            </div>
+            <div id="authBlock">
+                <a href="authorization.html">Войти</a>
+                <a>|</a>
+                <a href="registration.html">Зарегистрироваться</a>
+            </div>
+        </div>
+        <img id="headerAvatar" src="" alt="Аватар" style="display: none; cursor: pointer" onclick="window.location.href='profile.html'">
+    </div>
+    <script>
+        async function loadHeaderAvatar() {
+            const userLogin = localStorage.getItem("userLogin");
+            if (!userLogin) {
+                return;
+            }
+            const avatarImg = document.getElementById("headerAvatar");
+            const authBlock = document.getElementById("authBlock");
+            try {
+                const response = await fetch("http://localhost:3000/api/loadInfToProfile", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ login: userLogin })
+                });
+                const data = await response.json();
+                if(data.success){
+                    authBlock.innerHTML = `<a>Профиль: ${userLogin}</a>`;
+                    avatarImg.src = data.data.avatar+"?"+Date.now();
+                    avatarImg.style.display = "flex";
+                }
+            } catch (err) {
+                console.log("Ошибка:"+err);
+                authBlock.innerHTML = `<a>Профиль: ${userLogin}</a>`;
+            }
+        }
+        loadHeaderAvatar();
+    </script>
+</header>
+<body>
+<div class="DivNav">
+    <ul class="DivNavMenu">
+        <li><a href="index.html">Главная</a></li>
+        <li>
+            <a href="catalog.html">Каталог</a>
+            <ul class="DivNavSubmenu">
+                <li><a href="catalog.html?category=1">Одежда</a></li>
+                <li><a href="catalog.html?category=2">Обувь</a></li>
+                <li><a href="catalog.html?category=3">Аксессуары</a></li>
+                <li><a href="catalog.html?category=4">Спортивное питание</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="basket.html">Корзина</a>
+        </li>
+        <li>
+            <a href="profile.html">Профиль</a>
+        </li>
+        <li><a href="aboutUs.html">О нас</a></li>
+    </ul>
+    <div class="DivSearch">
+        <form id="searchForm" style="display: flex;">
+            <input type="text" id="InputSearch" placeholder="Поиск товаров...">
+            <button type="submit" id="ButtonSearch"><img src="Images/search.png" alt="Найти"></button>
+        </form>
+    </div>
+    <script>
+        const searchForm = document.getElementById("searchForm");
+        if (searchForm) {
+            searchForm.addEventListener("submit", function(e) {
+                e.preventDefault();
+                const query = document.getElementById("InputSearch").value.trim();
+                if (query === "") {
+                    window.location.href = "catalog.html";
+                } else {
+                    window.location.href = "catalog.html?search=" + encodeURIComponent(query);
+                }
+            });
+        }
+    </script>
+</div>
+    <div class="DivSlider">
+        <div class="DivSliderSlides">
+            <div class="DivSliderSlidesSlide">
+                <img src="Images/slide1.jpg" alt="ATHLETE">
+                <div class="SlidesCaption">Качественные и проверенные спортивные добавки</div>
+            </div>
+            <div class="DivSliderSlidesSlide">
+                <img src="Images/slide2.jpg" alt="ATHLETE">
+                <div class="SlidesCaption">Сила и уверенность с нами</div>
+            </div>
+            <div class="DivSliderSlidesSlide">
+                <img src="Images/slide3.jpg" alt="ATHLETE">
+                <div class="SlidesCaption">Комфортное движение вперед</div>
+            </div>
+            <div class="DivSliderSlidesSlide">
+                <img src="Images/slide4.jpg" alt="ATHLETE">
+                <div class="SlidesCaption">Несломимая воля к победе</div>
+            </div>
+        </div>
+        <button class="ButtonPrev">&#10094;</button>
+        <button class="ButtonNext">&#10095;</button>
+    </div>
+    <script src="scriptIndex.js"></script>
+    <div class="DivGrayLine">
+        <h3>Наши самые популярные товары:</h3>
+    </div>
+    <div class="DivPopular">
+        <div class="DivPopularProduct" onclick="window.location.href='productCard.html?id=13'" style="cursor: pointer;">
+            <img src="Images/popular1.1.png" alt="Протеин Optimum Nutrition"/>
+            <h4>Протеин Optimum Nutrition</h4>
+            <div class="DivPopularProductPrice">
+                <h4>8 490 руб.</h4>
+                <button>Подробнее</button>
+            </div>
+        </div>
+        <div class="DivPopularProduct" onclick="window.location.href='productCard.html?id=14'" style="cursor: pointer;">
+            <img src="Images/popular2.png" alt="Кроссовки Adidas Runblaze"/>
+            <h4>Кроссовки Adidas Runblaze</h4>
+            <div class="DivPopularProductPrice" >
+                <h4>9 999 руб.</h4>
+                <button>Подробнее</button>
+            </div>
+        </div>
+        <div class="DivPopularProduct" onclick="window.location.href='productCard.html?id=15'" style="cursor: pointer;">
+            <img src="Images/popular3.png" alt="Рашгард"/>
+            <h4>Рашгард</h4>
+            <div class="DivPopularProductPrice">
+                <h4>1 499 руб.</h4>
+                <button>Подробнее</button>
+            </div>
+        </div>
+    </div>
+    <a href="catalog.html" style="text-decoration: none;"><button class="ButtonShowAllProducts">Показать всю продукцию...</button></a>
+    <div class="DivAboutShopBackground">
+        <div class="DivAboutShop">
+            <div class="DivLogo">
+                <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
+                <a>ATHLETE</a>
+            </div>
+            <p>ATHLETE — это интернет-магазин спортивной одежды, обуви, аксессуаров и спортивных добавок для тех, кто ценит качество и комфорт. Мы отбираем только проверенные бренды и следим за каждым заказом.</p>
+            <p>Наша цель — сделать спорт доступным для каждого, предлагая товары по честным ценам с быстрой доставкой по всей России.</p>
+            <a href="aboutUs.html">
+                <button class="more-btn">Подробнее о компании...</button>
+            </a>
+        </div>
+    </div>
+    <div class="DivAdvantages">
+        <h3>Почему именно мы?</h3>
+        <ul>
+            <li>Удобная доставка — выберите для себя удобный пункт для получения посылки.</li>
+            <li>Возврат товаров — если возникнут какие-то проблемы, вы всегда можете позвонить по телефону поддержки и обсудить возврат средств.</li>
+            <li>Безопасная оплата — оплата происходит при поступлении товара в пункт выдачи.</li>
+            <li>Прозрачная проверка — по приезду товара в пункт выдачи у вас есть время, для того чтобы проверить или примерить товар.</li>
+        </ul>
+    </div>
+</body>
+<footer>
+    <div class="DivFooter">
+        <div class="DivFooterColumn">
+            <div class="DivLogo">
+                <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
+                <h1 style="color: black">ATHLETE</h1>
+            </div>
+        </div>
+        <div class="DivFooterColumn">
+            <a href="catalog.html">Каталог</a>
+            <a href="catalog.html?category=1">Одежда</a>
+            <a href="catalog.html?category=2">Обувь</a>
+            <a href="catalog.html?category=3">Аксессуары</a>
+            <a href="catalog.html?category=4">Спортивное питание</a>
+        </div>
+        <div class="DivFooterColumn">
+            <a href="index.html">Главная</a>
+            <a href="catalog.html">Каталог</a>
+            <a href="basket.html">Корзина</a>
+            <a href="profile.html">Профиль</a>
+            <a href="aboutUs.html">О нас</a>
+        </div>
+        <div class="DivFooterColumn">
+            <p>Контакты:</p>
+            <ul>
+                <li>Телефон: 8 (921) 064-88-28</li>
+                <li>Email: athlete@gmail.com</li>
+                <li>Прием звонков: Пн-Пт 10:00 - 20:00</li>
+            </ul>
+        </div>
+    </div>
+    <div style="border: 2px solid black"></div>
+    <p style="font-size: 15px; margin: 20px 0">&copy; 2026 Сайт по продаже спортивного инвентаря. Все права защищены.</p>
+</footer>
+</html>

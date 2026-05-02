@@ -1,0 +1,172 @@
+<html lang="ru">
+<head>
+    <title>Редактирование товара</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8" name = "viewport" content="width=device-width, initial-scale=1"/>
+</head>
+<body class="BodyAuthorization">
+<div class="DivLogo">
+    <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
+    <a>ATHLETE</a>
+</div>
+<div class="DivAdd">
+    <h2>Редактирование товара</h2>
+    <div id="previewBox" class="DivPreviewBox">
+        <img id="previewImage" src=""/>
+    </div>
+    <form id="addForm" class="FormAddProduct">
+        <label>Название</label>
+        <input type="text" id="name" required>
+        <label>Цена (руб.)</label>
+        <input type="number" id="price" min="1" required>
+        <label>Описание</label>
+        <textarea type="text" id="description" style="height: 100px; resize: none; margin-bottom: 15px; font-size: 15px" required></textarea>
+        <label>Категория </label>
+        <select id="category" required>
+            <option value="1" selected>Одежда</option>
+            <option value="2">Обувь</option>
+            <option value="3">Аксессуары</option>
+            <option value="4">Спортпит</option>
+        </select>
+        <label>Размеры</label>
+        <div id="sizesContainer" class="DivSizesContainer">
+
+        </div>
+        <label>Фотографии (можно несколько)</label>
+        <small style="font-weight: bold; font-style: italic">Удерживайте Ctrl, чтобы выбрать несколько</small>
+        <input type="file" id="photos" multiple accept="image/*">
+        <button type="submit">Редактировать</button>
+    </form>
+</div>
+<script>
+    const productId = new URLSearchParams(window.location.search).get('id');
+    if (!productId) {
+        alert("Товар не найден");
+        window.location.href = "catalog.html";
+    }
+    const fileInput = document.getElementById('photos');
+    const previewImage = document.getElementById('previewImage');
+    fileInput.addEventListener('change', function() {
+        if (fileInput.files && fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            previewImage.src = URL.createObjectURL(file);
+        }
+    });
+    const categorySelected = document.getElementById('category');
+    const sizesContainer = document.getElementById('sizesContainer');
+    categorySelected.addEventListener('change', ()=> {
+        const catId = categorySelected.value;
+        sizesContainer.innerHTML = ``;
+        let sizesArray = [];
+        if(catId === "1"){
+            sizesArray = ["S", "M", "L", "XL"];
+        }
+        else if(catId === "2"){
+            sizesArray = ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"];
+        }
+        else if(catId === "3"){
+            sizesArray = ["S", "M", "L", "Единый размер"];
+        }
+        else if(catId === "4"){
+            sizesArray = ["Единый размер"];
+        }
+        let html = "";
+        sizesArray.forEach(size => {
+            html += `<label style="margin-left: 10px; cursor:pointer; display: flex; flex-direction: row; align-content: center"><input type="checkbox" class="sizeCheck" value="${size}">${size}</input></label>`;
+        });
+        sizesContainer.innerHTML = html;
+    });
+    async function loadProductData(){
+        try{
+            const response = await fetch("http://localhost:3000/api/products");
+            const data = await response.json();
+            const product = data.products.find(p => p.id.toString() === productId);
+            if(!product){
+                alert("Товар не найден");
+                window.location.href = "catalog.html";
+                return;
+            }
+            document.getElementById("name").value = product.name;
+            document.getElementById("price").value = product.price;
+            document.getElementById("description").value = product.description;
+            document.getElementById("category").value = product.idCategory;
+            categorySelected.dispatchEvent(new Event('change'));
+            if(product.sizes){
+                try{
+                    const savedSizes = JSON.parse(product.sizes);
+                    savedSizes.forEach(size => {
+                        const checkBox = document.querySelector(`.sizeCheck[value="${size}"]`);
+                        if(checkBox){
+                            checkBox.checked = true;
+                        }
+                    });
+                }
+                catch(error){
+                    console.log(error);
+                }
+            }
+            if(product.images){
+                try{
+                    const images = JSON.parse(product.images);
+                    if(images.length > 0){
+                        previewImage.src = images[0];
+                    }
+                }
+                catch(error){
+                    console.log(error);
+                }
+            }
+        }
+        catch(e){
+            console.log(e);
+            alert("Не удалось загрузить данные");
+        }
+    }
+    document.getElementById("addForm").addEventListener("submit", async (e)=> {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append("name", document.getElementById("name").value);
+        formData.append("price", document.getElementById("price").value);
+        formData.append("description", document.getElementById("description").value);
+        formData.append("category", document.getElementById("category").value);
+        const selectedSizes = [];
+        document.querySelectorAll(".sizeCheck:checked").forEach(checkbox => {
+            selectedSizes.push(checkbox.value);
+        });
+        if(selectedSizes.length === 0){
+            alert("Выберите хотя бы один размер")
+            return;
+        }
+        formData.append("sizes", JSON.stringify(selectedSizes));
+        if(fileInput.files.length > 0){
+            for (let i = 0; i < fileInput.files.length; i++) {
+                formData.append("photos", fileInput.files[i]);
+            }
+        }
+        formData.append("productId", productId);
+        try{
+            console.log("FormData:"+formData);
+            const response = await fetch("http://localhost:3000/api/editProduct", {
+                method: "POST",
+                body: formData
+            });
+            const result = await response.json();
+            if(result.success){
+                alert(result.message);
+                window.location.href = `productCard.html?id=${productId}`;
+            }
+            else{
+                alert("Ошибка: "+result.message);
+            }
+        }
+        catch(e){
+            console.error(e);
+            console.log(e.message);
+            alert("Проблемы с сервером");
+        }
+    });
+    loadProductData();
+    categorySelected.dispatchEvent(new Event("change"));
+</script>
+</body>
+</html>

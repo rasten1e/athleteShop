@@ -1,0 +1,1696 @@
+*{	margin: 0;
+    font-family: Halvetica, arial, sans-serif;
+}
+header{
+    width: 100%;
+    background-color: darkred;
+    display: flex;
+    justify-content: space-around;
+}
+.DivLogo{
+    display: flex;
+    flex-direction: row;
+}
+.DivLogo a{
+    color: black;
+    align-self: center;
+    font-size: 30px;
+    font-weight: bold;
+}
+.ImgLogo{
+    width: 50px;
+    height: 50px;
+    padding: 10px;
+}
+.DivAuth{
+    margin-right: 30px;
+    align-content: center;
+    display: flex;
+    align-items: center;
+}
+.DivAuth img{
+    width: 30px;
+    height: 30px;
+    margin: 0 10px;
+}
+#headerAvatar{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+.DivAuth a{
+    text-decoration: none;
+    color: black;
+}
+.DivNav{
+    background-color: #333;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+}
+.DivNavMenu{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+.DivNavMenu li{
+    position: relative;
+}
+.DivNavMenu li a{
+    display: block;
+    padding: 15px 20px;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    background-color: #333;
+    transition: 0.2s;
+}
+.DivNavMenu li a:hover{
+    background-color: #555;
+}
+.DivNavSubmenu{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 180px;
+    background-color: #444;
+    display: none;
+    z-index: 100000;
+}
+.DivNavSubmenu li a{
+    display: block;
+    padding: 10px 15px;
+    color: white;
+    text-decoration: none;
+}
+.DivNavSubmenu li a:hover{
+    background-color: #666;
+}
+.DivNavMenu li:hover > .DivNavSubmenu {
+    display: block;
+    transition: 0.2s;
+}
+.DivSearch{
+    align-items: center;
+    display: flex;
+    border-radius: 10px;
+}
+.DivSearch input{
+    border: white;
+    width: 250px;
+    height: 30px;
+}
+.DivSearch input:focus{
+    outline: none;
+}
+.DivSearch button{
+    border: none;
+    height: 30px;
+    cursor: pointer;
+}
+.DivSearch button img{
+    width: 20px;
+}
+.DivSlider{
+    text-align: center;
+    margin: 0 auto;
+}
+.DivSlider img{
+    height: 600px;
+    width: 900px;
+    object-fit: cover;
+}
+.DivSlider button{
+    margin: 10px;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+.DivSlider{
+    overflow: hidden;
+    position: relative;
+}
+.DivSliderSlides{
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+.DivSliderSlidesSlide{
+    width: 100%;
+    flex-shrink: 0;
+    position: relative;
+}
+.DivSliderSlidesSlide img{
+    width: 100%;
+    display: block;
+}
+.ButtonPrev, .ButtonNext{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 100;
+}
+.ButtonPrev{
+    left: 10px;
+}
+.ButtonNext{
+    right: 10px;
+}
+.SlidesCaption{
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #434343B3;
+    color: white;
+    padding: 5px 10px;
+    font-size: 20px;
+    border-radius: 5px;
+}
+.DivGrayLine{
+    background-color: #333;
+    width: 100%;
+    height: 50px;
+    color: white;
+    align-content: center;
+}
+.DivGrayLine h3{
+    text-align: center;
+}
+.DivPopular{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.DivPopularProduct{
+    border: 3px solid #333;
+    border-radius: 15px;
+    width: 350px;
+    height: 400px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: 0.2s;
+}
+.DivPopularProduct:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+.DivPopularProduct img{
+    width: 100%;
+    height: 300px;
+    object-fit: contain;
+    background-color: #f8f9fa;
+    padding: 15px;
+    box-sizing: border-box;
+    display: block;
+    transition: transform 0.3s ease;
+}
+.DivPopularProductPrice{
+    display: flex;
+    flex-direction: row;
+    gap: 25PX;
+    margin-top: 20px;
+}
+.DivPopularProduct button{
+    border: none;
+    height: 35px;
+    width: 100px;
+    background-color: darkred;
+    color: white;
+    transform: translateY(-25%);
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: 0.2s;
+}
+.DivPopularProduct button:hover{
+    background-color: #4a0000;
+}
+.ButtonShowAllProducts{
+    border: none;
+    margin: 30px auto;
+    width: 80%;
+    max-width: 1150px;
+    display: flex;
+    height: 40px;
+    background-color: darkred;
+    color: #ffffff;
+    font-size: 18px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: 0.2s;
+}
+.ButtonShowAllProducts:hover{
+    background-color: #4a0000;
+}
+.DivAdvantages{
+    padding: 30px;
+    display: flex;
+    border: 3px solid #333;
+    width: 80%;
+    flex-direction: column;
+    margin: 0 auto;
+}
+.DivAdvantages h3{
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 20px;
+}
+.DivAdvantages ul li{
+    font-size: 20px;
+    list-style: none;
+    margin: 20px 0;
+    padding-left: 25px;
+    position: relative;
+}
+.DivAdvantages ul li:before{
+    content: "✓";
+    color: darkred;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.DivAboutShopBackground{
+    margin: 50px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: darkred;
+    flex-direction: column;
+    height: 550px;
+}
+.DivAboutShop{
+    font-size: 20px;
+    border-radius: 20px;
+    padding: 30px;
+    color: #c6c6c6;
+    background-color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 400px;
+    line-height: 2;
+}
+.DivAboutShop a{
+    margin-bottom: 20px;
+}
+.DivAboutShop button{
+    margin-top: 20px;
+    text-decoration: none;
+    color: white;
+    border: none;
+    height: 35px;
+    background-color: darkred;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: 0.2s;
+}
+.DivAboutShop button:hover{
+    background-color: #4a0000;
+}
+footer{
+    color: #a5a5a5;
+    margin-top: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background: darkred;
+}
+.DivFooter{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 20px auto;
+    padding: 0 20px;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+.DivFooterColumn{
+    display: flex;
+    flex-direction: column;
+    line-height: 1.8;
+    flex: 1;
+    min-width: 150px;
+    text-decoration: none;
+}
+.DivFooterColumn a{
+    text-decoration: none;
+    color: #a5a5a5;
+}
+.DivFooterColumn a:hover{
+    text-decoration: underline;
+}
+.DivFooterColumn ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.BodyAuthorization{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.DivAuthorization{
+    border: 2px solid #333333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 30px;
+}
+.DivAuthorization h2{
+    text-align: center;
+}
+.DivAuthorization input{
+    margin-bottom: 20px;
+    border: 1px solid #333333;
+    height: 25px;
+    font-size: 15px;
+}
+.DivAuthorization input:focus{
+    outline: none;
+}
+.DivAuthorization button{
+    border: none;
+    background-color: darkred;
+    color: white;
+    height: 30px;
+    width: 130px;
+    border-radius: 5px;
+    margin: 0 auto;
+}
+.DivAuthorization button:hover{
+    background-color: #4a0000;
+    cursor: pointer;
+}
+.DivAuthorization a{
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    margin: 15px auto 0;
+}
+.DivAuthorization a:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+.BodyRegistration{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.DivRegistration{
+    border: 2px solid #333333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 30px;
+}
+.DivRegistration h2{
+    text-align: center;
+}
+.DivRegistration input{
+    margin-bottom: 20px;
+    border: 1px solid #333333;
+    height: 25px;
+    font-size: 15px;
+}
+.DivRegistration input:focus{
+    outline: none;
+}
+.DivRegistration button{
+    border: none;
+    background-color: darkred;
+    color: white;
+    height: 30px;
+    width: 150px;
+    border-radius: 5px;
+    margin: 0 auto;
+}
+.DivRegistration button:hover{
+    background-color: #4a0000;
+    cursor: pointer;
+}
+.DivRegistration a{
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    margin: 15px auto 0;
+}
+.DivRegistration a:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+.DivTextAboutUs{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #333333;
+    border-radius: 20px;
+    padding: 30px;
+    margin: 50px;
+}
+.DivTextAboutUsSection{
+    font-size: 20px;
+    line-height: 1.5;
+}
+.DivTextAboutUsSection p{
+    text-indent: 1cm;
+}
+.DivTextAboutUsSection h2{
+    text-align: center;
+    margin: 20px 0;
+}
+.DivBigLogo{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.DivBigLogo a{
+    color: black;
+    align-self: center;
+    font-size: 40px;
+    font-weight: bold;
+}
+.DivBigLogo img{
+    width: 80px;
+    height: 80px;
+    padding: 10px;
+}
+.DivMainBodyCatalog{
+    min-height: 90vh;
+}
+.DivSearchSortFilter{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+.DivSortFilterSection {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+.DivSortSection{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #333333;
+    border-radius: 10px;
+    padding: 10px;
+}
+.DivSortSection label{
+    font-weight: bold;
+}
+.DivSortSection select{
+    margin-left: 10px;
+    font-weight: bold;
+    height: 25px;
+    border-radius: 5px;
+}
+.DivSortSection select:focus{
+    outline: none;
+}
+.DivSortSection select option{
+    font-weight: bold;
+    border: none;
+}
+.DivFilterSection{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #333333;
+    border-radius: 10px;
+    padding: 10px;
+}
+.DivFilterSection input{
+    margin-left: 10px;
+}
+.DivSearchSection{
+    display: flex;
+    flex-direction: row;
+}
+.DivSearchCatalog{
+    align-items: center;
+    display: flex;
+    width: 700px;
+    border: 2px solid #333333;
+    border-radius: 10px;
+    padding: 5px;
+    margin-bottom: 20px;
+}
+.DivSearchCatalog input{
+    border: white;
+    height: 30px;
+    width: 100%;
+    font-size: 17px;
+}
+.DivSearchCatalog input:focus{
+    outline: none;
+}
+.DivSearchCatalog button{
+    border: none;
+    height: 30px;
+    cursor: pointer;
+}
+.DivSearchCatalog button img{
+    width: 20px;
+}
+.AAddProduct{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 20px;
+    border: none;
+    background-color: darkred;
+    color: white;
+    height: 40px;
+    border-radius: 5px;
+    font-size: 15px;
+}
+.AAddProduct:hover{
+    background-color: #4a0000;
+    cursor: pointer;
+}
+.DivGridCatalog{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 25px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.DivGridCatalogCard{
+    border: 2px solid #333333;
+    border-radius: 10px;
+    padding: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.DivGridCatalogCard:hover{
+    transform: translateY(-5px);
+}
+.DivGridCatalogCard img{
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+}
+.DivGridCatalogCard h3 {
+    font-size: 20px;
+    margin: 15px 15px 5px;
+    color: #333333;
+}
+.DivGridCatalogCard p{
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 15px 15px;
+}
+.DivGridCatalogCard button{
+    border: none;
+    background-color: darkred;
+    color: white;
+    height: 30px;
+    width: calc(100% - 30px);
+    margin-left: 15px;
+    margin-top: auto;
+    border-radius: 5px;
+    font-size: 15px;
+}
+.DivGridCatalogCard button:hover{
+    background-color: #4a0000;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.DivMainBodyProfile{
+    min-height: 70.2vh;
+}
+.DivColumnsInf{
+    display: flex;
+    flex-direction: row;
+    border: 2px solid darkred;
+    border-radius: 15px;
+    padding: 25px;
+    margin: 40px auto;
+    gap: 80px;
+    max-width : 1200px;
+    justify-content: center;
+}
+.DivEditInf{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+}
+.DivEditInfSection{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.BtnLogout{
+    border: none;
+    background-color: darkred;
+    color: white;
+    padding: 10px 13px;
+    border-radius: 5px;
+    font-size: 15px;
+    transition: 0.2s;
+}
+.BtnLogout:hover{
+    background-color: #4a0000;
+    cursor: pointer;
+}
+.DivEditInfSection button{
+    border: none;
+    background-color: darkred;
+    color: white;
+    height: 30px;
+    width: 150px;
+    border-radius: 5px;
+    font-size: 15px;
+    transition: 0.2s;
+}
+.DivEditInfSection button:hover{
+    background-color: #4a0000;
+    cursor: pointer;
+}
+.DivEditInfSection input{
+    border: 1px solid #333333;
+    height: 25px;
+    font-size: 15px;
+}
+.DivEditInfPasswordSection {
+    display: flex;
+    flex-direction: column;
+}
+.DivEditInfPasswordSection button{
+    border: none;
+    background-color: darkred;
+    color: white;
+    height: 30px;
+    width: 150px;
+    border-radius: 5px;
+    font-size: 15px;
+    margin-top: 10px;
+    transition: 0.2s;
+}
+.DivEditInfPasswordSection button:hover{
+    background-color: #4a0000;
+    cursor: pointer;
+}
+.DivEditInfPasswordSection input{
+    border: 1px solid #333333;
+    height: 25px;
+    font-size: 15px;
+}
+.DivEditInfPasswordSection p{
+    margin-top: 10px;
+}
+.DivInf{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.DivOrdersHistory {
+    max-width: 1200px;
+    margin: 40px auto 0;
+    padding-top: 25px;
+    border-top: 2px solid #333;
+}
+.DivOrdersHistory h3 {
+    margin: 0 0 20px;
+    font-size: 22px;
+    color: #222;
+}
+.AAdminViewAllBtn{
+    display: flex;
+    padding: 12px 24px;
+    background-color: darkred;
+    color: white;
+    border-radius: 5px;
+    transition: 0.2s;
+    text-decoration: none;
+    width: 200px;
+    justify-content: center;
+}
+.AAdminViewAllBtn:hover{
+    background-color: #4a0000;
+}
+#ordersList{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.DivOrderCard{
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 18px 20px;
+}
+.DivOrderHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.DivOrderHeader p:first-child{
+    margin: 0;
+    font-weight: 700;
+    font-size: 16px;
+}
+.POrderStatus{
+    margin: 0;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-weight: bold;
+    color: white;
+    background: #d5891a;
+    font-size: 17px;
+}
+#ordersList p{
+    margin: 6px 0;
+    font-size: 17px;
+}
+.DivOrderActions{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+.BtnDeleteOrder{
+    margin-top: 12px;
+    padding: 8px 16px;
+    background: white;
+    color: darkred;
+    border: 1px solid darkred;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.BtnDeleteOrder:hover{
+    background: darkred;
+    border: 1px solid white;
+    color: white;
+}
+.BtnToggleItems{
+    margin-top: 12px;
+    padding: 8px 16px;
+    background: white;
+    color: darkred;
+    border: 1px solid darkred;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.BtnToggleItems:hover{
+    background: darkred;
+    border: 1px solid white;
+    color: white;
+}
+.BtnReorder{
+    margin-top: 12px;
+    padding: 8px 16px;
+    background: white;
+    color: darkred;
+    border: 1px solid darkred;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.BtnReorder:hover{
+    background: darkred;
+    border: 1px solid white;
+    color: white;
+}
+.BtnReview{
+    padding: 6px 16px;
+    background: white;
+    color: #21884c;
+    border: 1px solid #21884c;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.BtnReview:hover{
+    background: #21884c;
+    border: 1px solid white;
+    color: white;
+}
+.POrderStatus.status-принят{
+    background: #d5891a;
+}
+.POrderStatus.status-отправлен{
+    background: #297faf;
+}
+.POrderStatus.status-получен{
+    background: #21884c;
+}
+.OrderItemsList{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.OrderItemRow{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    border-radius: 8px;
+}
+.OrderItemImg{
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border: 1px solid #333;
+    border-radius: 7px;
+}
+.OrderItemInfo{
+    flex: 1;
+}
+.OrderItemInfo strong{
+    display: block;
+    color: #222;
+    margin-bottom: 4px;
+}
+.OrderItemInfo p{
+    margin: 0;
+    font-size: 13px;
+    color: #333;
+}
+.OrderItemTotal{
+    font-weight: bold;
+    color: #222;
+    font-size: 17px;
+}
+.ReviewForm {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 15px;
+    padding: 20px;
+    border: 1px solid #333;
+    width: 300px;
+}
+.ReviewForm p {
+    margin: 0 0 10px;
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+.ReviewForm textarea{
+    resize: none;
+    height: 120px;
+}
+.Star {
+    font-size: 28px;
+    color: #333333;
+    cursor: pointer;
+    margin-right: 5px;
+    font-style: normal;
+    transition: all 0.15s ease;
+}
+.Star:hover {
+    transform: scale(1.2);
+    color: #f39c12;
+}
+.DivAdd{
+    border: 2px solid #333333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 30px;
+}
+.DivAdd h2{
+    text-align: center;
+    margin-bottom: 20px;
+}
+.DivPreviewBox{
+    width: 250px;
+    height: 250px;
+    margin: 0 auto 15px;
+    border: 2px solid #333333;
+}
+.DivPreviewBox img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.FormAddProduct{
+    display: flex;
+    flex-direction: column;
+}
+.FormAddProduct input{
+    margin-bottom: 20px;
+    border: 1px solid #333333;
+    height: 25px;
+    font-size: 15px;
+}
+.FormAddProduct input[type = "checkbox"]{
+    height: auto;
+    cursor: pointer;
+    margin-bottom: 0;
+}
+.FormAddProduct input:focus{
+    outline: none;
+}
+.FormAddProduct select{
+    margin-bottom: 20px;
+    border: 1px solid #333333;
+    height: 25px;
+    font-size: 15px;
+}
+.FormAddProduct button{
+    border: none;
+    background-color: darkred;
+    color: white;
+    height: 30px;
+    width: 130px;
+    border-radius: 5px;
+    margin: 0 auto;
+}
+.FormAddProduct button:hover{
+    background-color: #4a0000;
+    cursor: pointer;
+}
+.DivSizesContainer{
+    display: flex;
+    flex-direction: row;
+    margin: 10px 0;
+}
+.BodyProductCard{
+    min-height: 66.5vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.DivColumnsProductCard{
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    padding: 30px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    max-width: 1400px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.DivColumnsProductCardSection{
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 450px;
+}
+.DivColumnsProductCardSection:last-child {
+     flex: 1;
+     min-width: 300px;
+ }
+#imageProduct {
+    width: 100%;
+    height: 420px;
+    object-fit: contain;
+    border: 2px solid #333333;
+    border-radius: 10px;
+    cursor: zoom-in;
+    transition: transform 0.25s ease;
+    box-shadow: inset 0 0 55px rgba(0, 0, 0, 0.5);
+}
+#thumbnailsBox {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+.ImgThumb {
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+    border: 2px solid white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.ImgThumb:hover{
+    border-color: darkred;
+    transform: translateY(-2px);
+}
+#nameProduct {
+    font-size: 30px;
+    font-weight: 700;
+    color: #222;
+    margin: 0 0 12px;
+    line-height: 1.3;
+}
+.PPriceProduct {
+    font-size: 22px;
+    font-weight: bold;
+    color: #222;
+}
+#buyProduct {
+    width: 100%;
+    padding: 15px;
+    background: darkred;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    margin-top: 20px;
+}
+#buyProduct:hover {
+    background: #4a0000;
+    transform: scale(1.03);
+}
+#adminBtns{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+.AdminBtnsEditBtn{
+    display: flex;
+    text-decoration: none;
+    justify-content: center;
+    width: 100%;
+    padding: 15px;
+    background: darkred;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 20px;
+}
+.AdminBtnsEditBtn:hover{
+    background: #4a0000;
+}
+#sizesProduct {
+    padding: 10px;
+}
+.SizeRadio {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+    cursor: pointer;
+    accent-color: darkred;
+}
+.DivImageModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+.DivImageModal.show {
+    display: flex;
+}
+#bigImageModal {
+    max-width: 80%;
+    max-height: 80%;
+    border-radius: 10px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+}
+.SpanModalClose {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    color: white;
+    font-size: 38px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.SpanModalClose:hover {
+    color: darkred;
+}
+#sizesProduct {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+#sizesProduct label {
+    padding: 8px 14px;
+    border: 1px solid #333;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+}
+#sizesProduct label:hover {
+    border-color: darkred;
+    color: darkred;
+}
+#sizesProduct label:has(input:checked) {
+    background-color: darkred;
+    color: white;
+    border-color: darkred;
+}
+#sizesProduct input[type="radio"] {
+    accent-color: white;
+}
+.DivReviews{
+    border-top: 2px solid #333;
+    margin: 10px 0;
+    padding-top: 20px;
+    max-width: 1300px;
+    width: 100%;
+}
+.DivReviewSection{
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+.BtnDeleteReview{
+    margin-top: 10px;
+    width: 120px;
+    padding: 5px;
+    background: white;
+    color: darkred;
+    border: 1px solid darkred;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.BtnDeleteReview:hover{
+    background: darkred;
+    border: 1px solid white;
+    color: white;
+}
+.DivBasketContainer {
+    min-height: 67vh;
+}
+.DivBasket{
+    max-width: 900px;
+    margin: 40px auto;
+}
+#basketList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.DivBasketItem {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    border: 1px;
+    border-radius: 10px;
+    align-items: center;
+}
+.BasketItemImg {
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #333;
+}
+.BasketItemInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.BasketItemInfo h3 {
+    font-size: 18px;
+    font-weight: bold;
+}
+.BasketItemInfo p {
+    font-size: 16px;
+}
+.BasketItemInfo p strong {
+    color: black;
+    font-weight: bold;
+}
+.BasketItemBtns {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+}
+.BasketItemBtns button {
+    padding: 7px 15px;
+    border: 1px solid darkred;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    transition: all 0.2s;
+    color: black;
+}
+.BasketItemBtns button:hover {
+    background: darkred;
+    border-color: white;
+    color: white;
+}
+.DivBasketTotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+}
+#buyBasketBtn {
+    padding: 14px 40px;
+    background: darkred;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+#buyBasketBtn:hover {
+    background: #4a0000;
+    transform: scale(1.03);
+}
+.DivMainBodyAdminOrders{
+    min-height: 72vh;
+}
+.DivAdminOrders {
+    max-width: 1200px;
+    padding: 25px;
+    margin: 0 auto;
+}
+.DivAdminOrders h2 {
+    margin: 0 0 15px;
+    font-size: 24px;
+    color: #333;
+    padding-bottom: 12px;
+}
+.DivControls {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    border: 1px solid #333333;
+    border-radius: 10px;
+    padding: 10px;
+    width: 600px;
+    justify-content: center;
+    margin: 0 auto 30px;
+}
+.DivControls label {
+    font-weight: bold;
+}
+.DivControls select {
+    font-weight: bold;
+    height: 25px;
+    border-radius: 5px;
+}
+.DivControls select:focus {
+    outline: none;
+}
+#adminOrdersList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.DivOrderCard.admin-order {
+    padding: 18px 20px;
+}
+.DivOrderCard p {
+    margin: 5px 0;
+}
+.DivOrderCard p strong {
+    color: #222;
+    font-weight: 600;
+}
+.OrderItemsList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.OrderItemInfo p{
+    font-size: 17px;
+}
+.DivStatusChange {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+.DivStatusChange label {
+    font-weight: bold;
+    font-size: 17px;
+}
+.SelectStatus {
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.SelectStatus:focus {
+    border-color: darkred;
+    outline: none;
+}
+.DivAvatarSection {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 10px;
+}
+.DivAvatarSection img {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border: 2px solid #333;
+    border-radius: 15px;
+    transition: border-color 0.2s;
+}
+.UserAvatar:hover {
+    border-color: darkred;
+}
+#uploadAvatarForm input[type="file"] {
+    margin: 10px 0;
+    font-size: 14px;
+}
+#uploadAvatarForm button {
+    padding: 8px 16px;
+    background: darkred;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+#uploadAvatarForm button:hover {
+    background: #4a0000;
+}
+@media (max-width: 1330px) {
+    .DivReviews{
+        width: 90%;
+    }
+    .DivColumnsInf{
+        flex-direction: column;
+        margin: 20px 10px;
+        gap: 20px;
+    }
+    .DivOrdersHistory{
+        margin: 20px 10px 0;
+    }
+    .DivInf{
+        align-items: flex-start;
+    }
+}
+@media (max-width: 1100px) {
+    .DivAboutShop {
+        width: 70%;
+    }
+    .DivFooter{
+        flex-direction: column;
+    }
+    .DivFooterColumn{
+        align-items: center;
+        font-size: 20px;
+    }
+}
+@media (max-width: 900px) {
+    .DivBasketContainer{
+        padding: 25px;
+    }
+}
+@media (max-width: 880px){
+    .DivSearchSortFilter{
+        margin: 10px 0 0 0;
+    }
+    .DivSearchSection {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    .DivSearchCatalog{
+        order: 2;
+    }
+    #DivAdminButton{
+        order: 1;
+        margin-bottom: 15px;
+    }
+    .DivSortFilterSection{
+        flex-direction: column;
+        align-items: center;
+    }
+    .DivSortSection{
+        order: 2;
+        width: inherit;
+    }
+    .DivFilterSection{
+        order: 1;
+    }
+}
+@media (max-width: 850px){
+    .DivColumnsProductCard{
+        justify-content: center;
+    }
+}
+@media (max-width: 800px){
+    .DivNav{
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+        gap: 10px;
+    }
+    .DivAboutShop {
+        font-size: 18px;
+        width: 70%;
+        height: 550px;
+    }
+    .DivAboutShopBackground{
+        height: 650px;
+    }
+    #descriptionProduct{
+        font-size: 20px;
+    }
+    .DivReviewSection{
+        font-size: 20px;
+    }
+    .BtnDeleteReview{
+        font-size: 20px;
+    }
+}
+@media (max-width: 715px){
+    .DivSearchCatalog{
+        width: 95%;
+    }
+    .DivColumnsInf{
+        align-items: center;
+    }
+    .DivControls{
+        flex-direction: column;
+        width: 400px;
+    }
+}
+@media (max-width: 580px){
+    .DivFilterSection{
+        flex-direction: column;
+        gap: 12px;
+    }
+    .DivSearchSortFilter{
+        font-size: 18px;
+    }
+}
+@media (max-width: 540px){
+    .DivNavMenu{
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    .DivNavMenu li{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        font-size: 20px;
+    }
+    .DivNavMenu li a{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .DivNavSubmenu{
+        border: 1px solid white;
+    }
+    header{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px 0;
+    }
+    .DivAuth{
+        margin: 0;
+    }
+}
+@media (max-width: 510px){
+    .DivOrderHeader{
+        flex-direction: column;
+    }
+    .DivOrderCard p{
+        text-align: center;
+    }
+    .DivOrderActions{
+        flex-direction: column;
+    }
+    .OrderItemRow{
+        flex-direction: column;
+    }
+    .OrderItemImg{
+        width: 150px;
+        height: 150px;
+    }
+    .OrderItemInfo{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+}
+@media (max-width: 500px){
+    .DivColumnsProductCardSection{
+        flex: none;
+        width: 100%;
+    }
+    .DivColumnsProductCardSection h3{
+        padding: 0 10px;
+    }
+    .DivColumnsProductCard{
+        padding: 20px 0;
+    }
+    #buyProduct{
+        width: 90%;
+        margin: 0 auto;
+    }
+    #adminBtns{
+        flex-direction: column;
+        gap: 0;
+        width: 90%;
+        margin: 0 auto;
+    }
+    #adminBtns a{
+        padding: 15px 0;
+    }
+    #imageProduct{
+        width: 80%;
+    }
+    .ProductGallery{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    #nameProduct{
+        font-size: 25px;
+        margin: 0 auto;
+    }
+    #priceProduct{
+        margin: 15px auto;
+    }
+    #sizesProduct{
+        justify-content: center;
+        align-items: center;
+    }
+    #descriptionProduct{
+        padding: 0 10px;
+    }
+    .DivTextAboutUs{
+        margin: 20px;
+        padding: 15px;
+    }
+    .DivTextAboutUsSection{
+        font-size: 18px;
+    }
+    .DivBigLogo img{
+        width: 50px;
+        height: 50px;
+        padding: 5px;
+    }
+    .DivBigLogo a{
+        font-size: 30px;
+    }
+    .DivStatusChange{
+        flex-direction: column;
+    }
+}
+@media (max-width: 450px){
+    .DivAdd{
+        margin: 20px 20px;
+        padding: 15px;
+    }
+    .DivBasketTotal{
+        flex-direction: column;
+        gap: 20px;
+    }
+    .DivBasketItem{
+        flex-direction: column;
+    }
+    .DivControls{
+        width: 90%;
+    }
+    .DivControls label{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+}
+@media (max-width: 400px){
+    .DivAboutShop {
+        height: 650px;
+    }
+    .DivAboutShopBackground{
+        height: 750px;
+    }
+    #sizesContainer{
+        flex-direction: column;
+        gap: 10px;
+    }
+    #userAvatar{
+        width: 200px;
+        height: 200px;
+    }
+}
