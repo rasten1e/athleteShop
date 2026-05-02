@@ -1589,6 +1589,10 @@ footer{
         align-items: center;
         flex-direction: column;
     }
+    .ReviewForm{
+        margin: 0 auto;
+        width: 80%;
+    }
 }
 @media (max-width: 500px){
     .DivColumnsProductCardSection{

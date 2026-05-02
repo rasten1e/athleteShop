@@ -427,9 +427,13 @@
                         if(orderStatus === "получен") {
                             reviewButton = `<button class="BtnReview" onclick="showReviewForm(${item.idProduct}, ${orderId})">★ Оставить отзыв</button>`;
                         }
+                        let imageUrl = item.image;
+                        if (imageUrl && imageUrl.startsWith('http')) {
+                            imageUrl = imageUrl.replace('http://localhost:3000', '').replace('http://127.0.0.1:3000', '');
+                        }
                         html += `
                                     <div class="OrderItemRow">
-                                        <img src="${item.image}" class="OrderItemImg" alt="${item.name}">
+                                        <img src="${imageUrl}" class="OrderItemImg" alt="${item.name}">
                                         <div class="OrderItemInfo">
                                             <strong>${item.name}</strong>
                                             <p>Размер: ${item.size} | ${item.price} руб. × ${item.quantity} шт.</p>
