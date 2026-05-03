@@ -367,7 +367,7 @@
                             <p><strong>ФИО заказчика: </strong>${order.userFIO}</p>
                             <p><strong>Телефон заказчика: </strong>${order.userPhone}</p>
                             <p><strong>Дата:</strong> ${new Date(order.createdAt).toLocaleDateString()}</p>
-                            <p><strong>Сумма:</strong>${order.totalAmount} руб.</p>
+                            <p><strong>Сумма:</strong> ${order.totalAmount} руб.</p>
                             <div class="DivOrderActions">
                                 <button class="BtnToggleItems" id="btnToggle-${order.idOrder}" onclick="toggleOrderItems(${order.idOrder}, '${order.status}')">Показать товары v</button>
                                 <button class="BtnReorder" onclick="reorder(${order.idOrder})">Заказать снова</button>
