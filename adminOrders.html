@@ -175,8 +175,8 @@
                         </div>
                         <p><strong>ФИО заказчика:</strong> ${order.userFIO}</p>
                         <p><strong>Телефон заказчика:</strong> ${order.userPhone}</p>
-                        <p>Дата: ${new Date(order.createdAt).toLocaleDateString()}</p>
-                        <p>Сумма: <strong>${order.totalAmount} руб.</strong></p>
+                        <p><strong>Дата:</strong> ${new Date(order.createdAt).toLocaleDateString()}</p>
+                        <p><strong>Сумма:</strong>${order.totalAmount} руб.</p>
                         <div class="DivOrderActions">
                             <button class="BtnToggleItems" id="btnToggle-${order.idOrder}">Показать товары v</button>
                             <button class="BtnDeleteOrder" id="btnDelete-${order.idOrder}">Удалить заказ</button>
