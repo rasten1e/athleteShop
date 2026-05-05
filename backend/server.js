@@ -86,33 +86,33 @@ app.post("/api/register", (req, res)=> {
         return res.json({success: false, message: "Логин должен быть до 24 символов"});
     }
     const passwordHash = bcrypt.hashSync(password, 10);
+
     db.get("SELECT * FROM users WHERE login = ? OR phone = ?", [login, phone], (err, existUser) => {
-        if (err) return res.status(500).json({success: false, message: "Ошибка сервера"});
+        if (err) {
+            return res.status(500).json({success: false, message: "Ошибка сервера"});
+        }
         if (existUser){
             if (existUser.login === login){
                 return res.json({success: false, message: "Такой логин уже занят"});
             }
-            if (existUser.phone === phone && existUser.idRole === 2) {
-
-            } else {
+            if (existUser.phone === phone && existUser.idRole !== 2) {
                 return res.json({success: false, message: "Такой телефон уже зарегистрирован"});
             }
         }
-        else {
-            db.run(
-                "INSERT INTO users (login, password, idRole, FIO, phone) VALUES (?,?,1,?,?)", [login, passwordHash, FIO, phone],
-                (err) => {
-                    if (err) {
-                        console.log("Ошибка БД: " + err.message);
-                        return res.status(500).json({success: false, message: "Ошибка при сохранении"});
-                    }
-                    else{
-                        console.log("Зарегистрирован новый пользователь: " + login);
-                        return res.json({success: true, message: "Регистрация прошла успешно. Войдите в профиль"});
-                    }
+        db.run(
+            "INSERT INTO users (login, password, idRole, FIO, phone) VALUES (?,?,1,?,?)",
+            [login, passwordHash, FIO, phone],
+            (err) => {
+                if (err) {
+                    console.log("Ошибка БД: " + err.message);
+                    return res.status(500).json({success: false, message: "Ошибка при сохранении"});
                 }
-            );
-        }
+                else{
+                    console.log("Зарегистрирован новый пользователь: " + login);
+                    return res.json({success: true, message: "Регистрация прошла успешно. Войдите в профиль"});
+                }
+            }
+        );
     });
 });
 
