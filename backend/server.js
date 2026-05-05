@@ -34,6 +34,10 @@ const port = 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "..")));
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "..", "index.html"));
+});
 
 const dbPath = path.resolve(__dirname, "../database.db");
 const db = new sqlite3.Database(dbPath);
