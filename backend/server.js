@@ -561,8 +561,6 @@ app.delete("/api/reviews/:id", (req, res) => {
         });
     });
 });
-console.log("🔍 DEBUG: __dirname =", __dirname);
-console.log("🔍 DEBUG: Ищу index.html в:", path.join(__dirname, "..", "index.html"));
 app.listen(port, () => {
     console.log("Сервер запущен на http://localhost: " + port);
 })
