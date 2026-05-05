@@ -265,7 +265,6 @@ app.get("/api/products", (req, res)=> {
             return res.json({success: true, products:[] });
         }
         else{
-            console.log("Всего товаров для показа: "+products.length);
             return res.json({success: true, products});
         }
     });
@@ -562,7 +561,8 @@ app.delete("/api/reviews/:id", (req, res) => {
         });
     });
 });
-
+console.log("🔍 DEBUG: __dirname =", __dirname);
+console.log("🔍 DEBUG: Ищу index.html в:", path.join(__dirname, "..", "index.html"));
 app.listen(port, () => {
     console.log("Сервер запущен на http://localhost: " + port);
 })
