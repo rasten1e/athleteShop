@@ -88,7 +88,11 @@ app.post("/api/register", (req, res)=> {
             if (existUser.login === login){
                 return res.json({success: false, message: "Такой логин уже занят"});
             }
-            return res.json({success: false, message: "Такой телефон уже зарегистрирован"});
+            if (existUser.phone === phone && existUser.idRole === 2) {
+
+            } else {
+                return res.json({success: false, message: "Такой телефон уже зарегистрирован"});
+            }
         }
         else {
             db.run(
@@ -489,9 +493,12 @@ app.post("/api/orders/:id/status", (req, res) => {
 
 app.post("/api/reviews", (req, res) => {
     const { login, productId, rating, comment } = req.body;
-    db.get("SELECT idUser FROM users WHERE login = ?", [login], (err, user) => {
+    db.get("SELECT idRole, idUser FROM users WHERE login = ?", [login], (err, user) => {
         if (err || !user) {
             return res.json({ success: false, message: "Ошибка пользователя" });
+        }
+        if(user.idRole === 2){
+            return res.json({ success: false, message: "Администраторы не могут оставлять отзывы" });
         }
         db.get(
             "SELECT idReview FROM reviews WHERE idUser = ? AND idProduct = ?", [user.idUser, productId], (err, existing) => {
