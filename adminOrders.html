@@ -234,11 +234,11 @@
                 });
                 const data = await response.json();
                 if (data.success) {
-                    const statusLabel = document.getElementById(`status-${orderId}`);
-                    statusLabel.textContent = newStatus;
-                    statusLabel.className = `POrderStatus status-${newStatus}`;
+                    const order = allOrders.find(o => o.idOrder === orderId);
+                    if (order) order.status = newStatus;
+                    drawOrders();
                 } else {
-                    alert("Ошибка: "+data.message);
+                    alert("Ошибка: " + data.message);
                 }
             } catch (err) {
                 console.log(err);
