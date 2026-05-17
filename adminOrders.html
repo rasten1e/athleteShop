@@ -22,7 +22,7 @@
                 <a href="registration.html">Зарегистрироваться</a>
             </div>
         </div>
-        <img id="headerAvatar" src="" alt="Аватар" style="display: none; cursor: pointer" onclick="window.location.href='profile.html'">
+        <img loading="lazy" id="headerAvatar" src="" alt="Аватар" style="display: none; cursor: pointer" onclick="window.location.href='profile.html'">
     </div>
     <script>
         async function loadHeaderAvatar() {
@@ -160,7 +160,6 @@
                 return;
             }
             filtered.forEach(order => {
-                // Подготовка selected через простые if
                 let selected1 = "";
                 let selected2 = "";
                 let selected3 = "";
@@ -258,7 +257,7 @@
                     data.items.forEach(item => {
                         html += `
                             <div class="OrderItemRow">
-                                <img src="${item.image}" class="OrderItemImg" alt="${item.name}">
+                                <img loading="lazy" src="${item.image}" class="OrderItemImg" alt="${item.name}">
                                 <div class="OrderItemInfo">
                                     <strong>${item.name}</strong>
                                     <p>Размер: ${item.size} | ${item.price} руб. x ${item.quantity} шт.</p>
@@ -309,8 +308,8 @@
 </body>
 <footer>
     <div class="DivFooter">
-        <div class="DivFooterColumn">
-            <div class="DivLogo">
+        <div class="DivFooterColumn logo">
+            <div class="DivLogo" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
                 <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
                 <h1 style="color: black">ATHLETE</h1>
             </div>

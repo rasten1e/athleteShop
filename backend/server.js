@@ -34,7 +34,14 @@ const port = 3000;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "..")));
+app.use(express.static(path.join(__dirname, ".."), {
+    maxAge: '7d',
+    setHeaders: (res, filePath) => {
+        if (filePath.match(/\.(jpg|jpeg|png|webp|gif|svg)$/)) {
+            res.setHeader('Cache-Control', 'public, max-age=604800, immutable');
+        }
+    }
+}));
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "index.html"));
 });

@@ -22,7 +22,7 @@
                 <a href="registration.html">Зарегистрироваться</a>
             </div>
         </div>
-        <img id="headerAvatar" src="" alt="Аватар" style="display: none; cursor: pointer" onclick="window.location.href='profile.html'">
+        <img loading="lazy" id="headerAvatar" src="" alt="Аватар" style="display: none; cursor: pointer" onclick="window.location.href='profile.html'">
     </div>
     <script>
         async function loadHeaderAvatar() {
@@ -314,7 +314,7 @@
                         html += `
                             <div class="DivReviewSection">
                                 <div style="display: flex; flex-direction: row; align-items: center; margin-bottom: 10px;">
-                                    <img src="${avatar}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                                    <img loading="lazy" src="${avatar}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
                                     <div style="display: flex; flex-direction: column; margin-left: 10px">
                                         <strong>${r.FIO}</strong>
                                         <p style="color: #f39c12; font-size: 25px;">${"★".repeat(r.rating)}${"☆".repeat(5-r.rating)}</p>
@@ -359,8 +359,8 @@
 </body>
 <footer>
     <div class="DivFooter">
-        <div class="DivFooterColumn">
-            <div class="DivLogo">
+        <div class="DivFooterColumn logo">
+            <div class="DivLogo" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
                 <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
                 <h1 style="color: black">ATHLETE</h1>
             </div>

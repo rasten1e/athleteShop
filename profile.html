@@ -22,7 +22,7 @@
                 <a href="registration.html">Зарегистрироваться</a>
             </div>
         </div>
-        <img id="headerAvatar" src="" alt="Аватар" style="display: none; cursor: pointer" onclick="window.location.href='profile.html'">
+        <img loading="lazy" id="headerAvatar" src="" alt="Аватар" style="display: none; cursor: pointer" onclick="window.location.href='profile.html'">
     </div>
     <script>
         async function loadHeaderAvatar() {
@@ -97,7 +97,7 @@
         </div>
         <div class="DivColumnsInf">
             <div class="DivAvatarSection">
-                <img id="userAvatar" src="Images/UserImages/defaultAvatar.png" alt="Аватар">
+                <img loading="lazy" id="userAvatar" src="Images/UserImages/defaultAvatar.png" alt="Аватар">
                 <form id="uploadAvatarForm" enctype="multipart/form-data">
                     <h4 style="margin-top: 10px">Аватар:</h4>
                     <input type="file" id="avatarInput" name="avatar" accept="image/*">
@@ -434,7 +434,7 @@
                         }
                         html += `
                                     <div class="OrderItemRow">
-                                        <img src="${imageUrl}" class="OrderItemImg" alt="${item.name}">
+                                        <img loading="lazy" src="${imageUrl}" class="OrderItemImg" alt="${item.name}">
                                         <div class="OrderItemInfo">
                                             <strong>${item.name}</strong>
                                             <p>Размер: ${item.size} | ${item.price} руб. × ${item.quantity} шт.</p>
@@ -575,8 +575,8 @@
 </body>
 <footer>
     <div class="DivFooter">
-        <div class="DivFooterColumn">
-            <div class="DivLogo">
+        <div class="DivFooterColumn logo">
+            <div class="DivLogo" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
                 <img src="Images/run.png" alt="LOGO" class="ImgLogo"/>
                 <h1 style="color: black">ATHLETE</h1>
             </div>
