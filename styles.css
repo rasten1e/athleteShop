@@ -1111,6 +1111,8 @@ footer{
 }
 #buyProduct {
     width: 100%;
+    display: flex;
+    max-width: 400px;
     padding: 15px;
     background: darkred;
     color: white;
@@ -1120,7 +1122,7 @@ footer{
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s, color 0.2s, transform 0.2s;
-    margin-top: 20px;
+    justify-content: center;
 }
 #buyProduct:hover {
     background: #4a0000;
@@ -1145,7 +1147,6 @@ footer{
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
-    margin-top: 20px;
 }
 .AdminBtnsEditBtn:hover{
     background: #4a0000;
