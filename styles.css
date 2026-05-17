@@ -1130,6 +1130,8 @@ footer{
 }
 #adminBtns{
     display: flex;
+    width: 100%;
+    max-width: 400px;
     flex-direction: row;
     gap: 20px;
 }
@@ -1641,7 +1643,7 @@ footer{
     }
     #adminBtns{
         flex-direction: column;
-        gap: 0;
+        gap: 20;
         width: 90%;
         margin: 0 auto;
     }
@@ -1710,6 +1712,10 @@ footer{
         flex-direction: column;
         align-items: center;
         gap: 10px;
+    }
+    .DivColumnsProductCardSection:first-child
+    {
+        flex: none;
     }
 }
 @media (max-width: 400px){
