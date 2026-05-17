@@ -167,6 +167,11 @@
                 if (order.status === "отправлен") selected2 = "selected";
                 if (order.status === "получен") selected3 = "selected";
 
+                let disabled = "";
+                if (order.status === "получен") {
+                    disabled = "disabled";
+                }
+
                 list.innerHTML += `
                     <div class="DivOrderCard admin-order" id="card-${order.idOrder}">
                         <div class="DivOrderHeader">
@@ -184,7 +189,7 @@
                         <div class="DivOrderItems" id="orderItems-${order.idOrder}" style="display: none;"></div>
                         <div class="DivStatusChange">
                             <label>Изменить статус:</label>
-                            <select class="SelectStatus" id="select-${order.idOrder}">
+                            <select class="SelectStatus" id="select-${order.idOrder}" ${disabled}>
                                 <option value="принят" ${selected1}>принят</option>
                                 <option value="отправлен" ${selected2}>отправлен</option>
                                 <option value="получен" ${selected3}>получен</option>
@@ -209,6 +214,10 @@
                 const select = document.getElementById(`select-${order.idOrder}`);
                 if (select) {
                     select.addEventListener("change", function() {
+                        if (!confirm("Вы действительно хотите изменить статус заказа?")) {
+                            select.value = order.status;
+                            return;
+                        }
                         const newStatus = select.value;
                         changeOrderStatus(order.idOrder, newStatus);
                     });

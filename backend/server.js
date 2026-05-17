@@ -480,23 +480,22 @@ app.get("/api/orders/:id/items", (req, res) => {
 });
 
 app.post("/api/orders/:id/status", (req, res) => {
-    const orderId = req.params.id;
     const { login, status } = req.body;
+    const orderId = req.params.id;
     db.get("SELECT idRole FROM users WHERE login = ?", [login], (err, user) => {
         if (err || !user || user.idRole !== 2) {
             return res.json({ success: false, message: "Доступ запрещён" });
         }
-        db.run("UPDATE orders SET status = ? WHERE idOrder = ?", [status, orderId], function(err) {
-            if (err) {
-                console.error("Ошибка обновления статуса:"+err.message);
-                return res.json({ success: false, message: "Ошибка сервера" });
+        db.get("SELECT status FROM orders WHERE idOrder = ?", [orderId], (err, order) => {
+            if (order && order.status === "получен") {
+                return res.json({ success: false, message: "Статус 'получен' нельзя изменить" });
             }
-            if (this.changes === 0) {
-                return res.json({ success: false, message: "Заказ не найден" });
-            }
-            else {
-                return res.json({ success: true, message: "Статус обновлён" });
-            }
+            db.run("UPDATE orders SET status = ? WHERE idOrder = ?", [status, orderId], function(err) {
+                if (err) {
+                    return res.json({ success: false, message: "Ошибка сервера" });
+                }
+                res.json({ success: true, message: "Статус обновлён" });
+            });
         });
     });
 });
