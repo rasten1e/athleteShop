@@ -192,6 +192,11 @@
                 alert("Выберите файл для загрузки");
                 return;
             }
+            const file = fileInput.files[0];
+            if (!file.type.startsWith("image/")) {
+                alert("Можно загружать только картинки (JPG, PNG, JPEG)");
+                return;
+            }
             const formData = new FormData();
             formData.append("avatar", fileInput.files[0]);
             formData.append("login", login);

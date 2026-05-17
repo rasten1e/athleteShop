@@ -149,6 +149,10 @@ header{
     width: 100%;
     display: block;
 }
+.DivSliderSlidesSlide:nth-child(4) img{
+    object-fit: cover;
+    object-position: center 10%;
+}
 .ButtonPrev, .ButtonNext{
     position: absolute;
     top: 50%;
@@ -1711,5 +1715,9 @@ footer{
     .DivFooterColumn li{
         font-size: 18px;
         white-space: wrap;
+    }
+    .DivSliderSlidesSlide:nth-child(4) img{
+        object-fit: cover;
+        object-position: 35% 0;
     }
 }
