@@ -178,6 +178,27 @@ app.post("/api/changePhone", (req, res)=> {
     });
 });
 
+app.post("/api/changeEmail", (req, res)=> {
+    const {email, login} = req.body;
+    if(!email || !email.includes("@") || !email.includes(".") || email.length < 6){
+        return res.json({success: false, message: "Введите корректный email"});
+    }
+    db.get("SELECT * FROM users WHERE email = ?", [email], (err, existEmail) => {
+        if (err) return res.status(500).json({success: false, message: "Ошибка сервера"});
+        if (existEmail && existEmail.login !== login){
+            return res.json({success: false, message: "Такой email уже зарегистрирован"});
+        }
+        else {
+            db.run("UPDATE users SET email = ? WHERE login = ?", [email, login], (err) => {
+                if(err) return res.status(500).json({success: false, message: "Ошибка сервера"});
+                else{
+                    return res.json({success: true, message: "Email изменен"});
+                }
+            });
+        }
+    });
+});
+
 app.post("/api/changeLogin", (req, res)=> {
     const {newLogin, login} = req.body;
     if(newLogin.length > 24){

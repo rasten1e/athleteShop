@@ -110,6 +110,8 @@
                 <p id="FIOInf"></p>
                 <h4>Телефон:</h4>
                 <p id="phoneInf"></p>
+                <h4>Email:</h4>
+                <p id="emailInf"></p>
                 <h4>Логин:</h4>
                 <p id="loginInf"></p>
                 <button class="BtnLogout" id="btnLogout">Выйти из аккаунта</button>
@@ -125,6 +127,11 @@
                 <form class="DivEditInfSection" id="changePhoneForm">
                     <h4>Телефон:</h4>
                     <input id="phone" type="tel" placeholder="79009009090" maxlength="11">
+                    <button type="submit">Поменять</button>
+                </form>
+                <form class="DivEditInfSection" id="changeEmailForm">
+                    <h4>Email:</h4>
+                    <input id="email" type="email" placeholder="example123@mail.ru">
                     <button type="submit">Поменять</button>
                 </form>
                 <form class="DivEditInfSection" id="changeLoginForm">
@@ -166,6 +173,7 @@
                     document.getElementById("FIOInf").textContent = data.data.FIO;
                     document.getElementById("phoneInf").textContent = data.data.phone;
                     document.getElementById("loginInf").textContent = data.data.login;
+                    document.getElementById("emailInf").textContent = data.data.email;
                     const avatarImg = document.getElementById("userAvatar");
                     if (avatarImg && data.data.avatar) {
                         avatarImg.src = data.data.avatar + "?" + Date.now();
@@ -265,6 +273,33 @@
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({phone, login})
+                });
+                const data = await response.json();
+                if(data.success){
+                    alert(data.message);
+                    location.reload();
+                }
+                else{
+                    alert("Ошибка: "+data.message);
+                }
+            }
+            catch(err){
+                alert("Ошибка соединения: "+err.message);
+            }
+        });
+        document.getElementById("changeEmailForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const login = localStorage.getItem("userLogin");
+            const email = document.getElementById("email").value.trim().toLowerCase();
+            if(!email.includes("@") || !email.includes(".") || email.length < 6){
+                alert("Введите корректный email (например: user@mail.ru)");
+                return;
+            }
+            try{
+                const response = await fetch("/api/changeEmail", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({email, login})
                 });
                 const data = await response.json();
                 if(data.success){
