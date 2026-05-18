@@ -16,6 +16,8 @@
         <input id="FIO" type="text" required>
         <p>Телефон</p>
         <input id="phone" type="tel" placeholder="79009009090" maxlength="11" required>
+        <p>Email</p>
+        <input id="email" type="email" placeholder="example123@mail.ru" required>
         <p>Логин</p>
         <input id="login" type="text" minlength="8" maxlength="24" required>
         <p>Пароль</p>
@@ -33,11 +35,15 @@
             e.preventDefault();
             const FIO = document.getElementById("FIO").value.trim();
             const phone = phoneInput.value;
+            const email = document.getElementById("email").value.trim().toLowerCase();
             const login = document.getElementById("login").value.trim();
             const password = document.getElementById("password").value;
             const passwordAgain = document.getElementById("passwordAgain").value;
             if(phone.length !== 11 || !phone.startsWith("7")) {
                 return alert("Телефон должен содержать 11 цифр и начинаться с 7");
+            }
+            if (!email.includes("@") || !email.includes(".") || email.length < 6) {
+                return alert("Введите корректный email (например: user@mail.ru)");
             }
             if(!/[A-ZА-Я]/.test(password)){
                 return alert("Пароль должен содержать хотя бы одну ЗАГЛАВНУЮ букву");
@@ -52,7 +58,7 @@
                 const response = await fetch("/api/register", {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({FIO, phone, login, password})
+                    body: JSON.stringify({FIO, phone, login, password, email})
                 });
                 const data = await response.json();
                 if(data.success){

@@ -85,8 +85,8 @@ app.post("/api/login", (req, res)=> {
 });
 
 app.post("/api/register", (req, res)=> {
-    const {FIO, phone, login, password} = req.body;
-    if(!FIO || !phone || !login || !password){
+    const {FIO, phone, login, password, email} = req.body;
+    if(!FIO || !phone || !login || !password || !email){
         return res.json({success: false, message: "Заполните все поля"});
     }
     if(login.length > 24){
@@ -94,7 +94,7 @@ app.post("/api/register", (req, res)=> {
     }
     const passwordHash = bcrypt.hashSync(password, 10);
 
-    db.get("SELECT * FROM users WHERE login = ? OR phone = ?", [login, phone], (err, existUser) => {
+    db.get("SELECT * FROM users WHERE login = ? OR phone = ? OR email = ?", [login, phone, email], (err, existUser) => {
         if (err) {
             return res.status(500).json({success: false, message: "Ошибка сервера"});
         }
@@ -105,10 +105,13 @@ app.post("/api/register", (req, res)=> {
             if (existUser.phone === phone && existUser.idRole !== 2) {
                 return res.json({success: false, message: "Такой телефон уже зарегистрирован"});
             }
+            if (existUser.email === email) {
+                return res.json({ success: false, message: "Такой email уже зарегистрирован"});
+            }
         }
         db.run(
-            "INSERT INTO users (login, password, idRole, FIO, phone) VALUES (?,?,1,?,?)",
-            [login, passwordHash, FIO, phone],
+            "INSERT INTO users (login, password, idRole, FIO, phone, email) VALUES (?,?,1,?,?,?)",
+            [login, passwordHash, FIO, phone, email],
             (err) => {
                 if (err) {
                     console.log("Ошибка БД: " + err.message);
