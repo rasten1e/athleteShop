@@ -1024,7 +1024,7 @@ footer{
     margin: 10px 0;
 }
 .BodyProductCard{
-    min-height: 66.5vh;
+    min-height: 70vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
