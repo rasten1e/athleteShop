@@ -131,7 +131,7 @@ app.post("/api/loadInfToProfile", (req, res)=> {
     if(!login){
         return res.json({success: false, message: "Пользователь не авторизован"});
     }
-    db.get("SELECT FIO, phone, login, avatar FROM users WHERE login = ?", [login], (err, user) => {
+    db.get("SELECT FIO, phone, login, avatar, email FROM users WHERE login = ?", [login], (err, user) => {
         if (err){
             return res.status(500).json({success: false, message: "Ошибка сервера"});
         }
