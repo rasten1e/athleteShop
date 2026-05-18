@@ -75,6 +75,7 @@
             <li><a href="aboutUs.html">О нас</a></li>
         </ul>
     </div>
+    <button id="menuToggle" style="position:absolute; left:15px; top:10px; background:none; border:none; color:white; font-size:28px; cursor:pointer; z-index:1001;">☰</button>
     <div class="DivSearchSortFilter">
         <div class="DivSearchSection">
             <div class="DivSearchCatalog">
@@ -229,6 +230,21 @@
             });
         });
     });
+
+    const menuToggle = document.getElementById("menuToggle");
+    const navMenu = document.querySelector(".DivNavMenu");
+    if (menuToggle && navMenu) {
+        menuToggle.addEventListener("click", () => {
+            navMenu.classList.toggle("active");
+            menuToggle.textContent = navMenu.classList.contains("active") ? "✕" : "☰";
+        });
+        navMenu.querySelectorAll("a").forEach(link => {
+            link.addEventListener("click", () => {
+                navMenu.classList.remove("active");
+                menuToggle.textContent = "☰";
+            });
+        });
+    }
 </script>
 </body>
 <footer>

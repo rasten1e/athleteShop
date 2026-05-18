@@ -74,6 +74,7 @@
                 </li>
                 <li><a href="aboutUs.html">О нас</a></li>
             </ul>
+            <button id="menuToggle" style="position:absolute; left:15px; top:10px; background:none; border:none; color:white; font-size:28px; cursor:pointer; z-index:1001;">☰</button>
             <div class="DivSearch">
                 <form id="searchForm" style="display: flex;">
                     <input type="text" id="InputSearch" placeholder="Поиск товаров...">
@@ -313,6 +314,21 @@
         document.getElementById("statusFilter").addEventListener("change", drawOrders);
         document.getElementById("dateSort").addEventListener("change", drawOrders);
         document.addEventListener("DOMContentLoaded", loadOrders);
+
+        const menuToggle = document.getElementById("menuToggle");
+        const navMenu = document.querySelector(".DivNavMenu");
+        if (menuToggle && navMenu) {
+            menuToggle.addEventListener("click", () => {
+                navMenu.classList.toggle("active");
+                menuToggle.textContent = navMenu.classList.contains("active") ? "✕" : "☰";
+            });
+            navMenu.querySelectorAll("a").forEach(link => {
+                link.addEventListener("click", () => {
+                    navMenu.classList.remove("active");
+                    menuToggle.textContent = "☰";
+                });
+            });
+        }
     </script>
 </body>
 <footer>

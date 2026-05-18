@@ -1606,9 +1606,6 @@ footer{
         flex-direction: column;
         width: 100%;
         background: #333;
-        position: absolute;
-        top: 60px;
-        left: 0;
         padding: 10px 0;
         z-index: 1000;
     }
@@ -1636,12 +1633,20 @@ footer{
         padding: 10px;
         box-sizing: border-box;
         order: -1;
+        justify-content: center;
+    }
+    #searchForm{
+        width: 80%;
     }
     .DivSearch input {
         width: 100%;
         max-width: none;
     }
     header {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px 0;
         position: relative;
     }
     .DivAuth{
