@@ -126,6 +126,7 @@
         <span class="SpanModalClose">&times</span>
         <img id="bigImageModal" src="" alt="Фото товара">
     </div>
+    <button id="scrollTopBtn" title="Наверх">↑</button>
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get("id");
@@ -356,6 +357,17 @@
                 alert("Проблемы с сервером");
             }
         };
+        const scrollTopBtn = document.getElementById("scrollTopBtn");
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 300) {
+                scrollTopBtn.classList.add("show");
+            } else {
+                scrollTopBtn.classList.remove("show");
+            }
+        });
+        scrollTopBtn.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
     </script>
 </body>
 <footer>
