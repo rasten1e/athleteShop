@@ -445,7 +445,7 @@ app.get("/api/loadOrders/user", (req, res) => {
         if (err || !user) {
             return res.json({ success: false, message: "Пользователь не найден" });
         }
-        db.all("SELECT orders.*, (SELECT FIO FROM users where idUser = orders.idUser) as userFIO, (SELECT phone FROM users WHERE idUser = orders.idUser) as userPhone FROM orders WHERE orders.idUser = ? ORDER BY createdAt DESC", [user.idUser], (err, orders) => {
+        db.all("SELECT orders.*, (SELECT FIO FROM users where idUser = orders.idUser) as userFIO, (SELECT phone FROM users WHERE idUser = orders.idUser) as userPhone, (SELECT email FROM users WHERE idUser = orders.idUser) as userEmail FROM orders WHERE orders.idUser = ? ORDER BY createdAt DESC", [user.idUser], (err, orders) => {
             if (err) {
                 return res.json({ success: false, message: "Ошибка БД" });
             }
@@ -457,7 +457,7 @@ app.get("/api/loadOrders/user", (req, res) => {
 });
 
 app.get("/api/loadOrders/admin", (req, res) => {
-    db.all("SELECT orders.*, (SELECT FIO FROM users where idUser = orders.idUser) as userFIO, (SELECT phone FROM users WHERE idUser = orders.idUser) as userPhone FROM orders ORDER BY createdAt DESC",  (err, orders) => {
+    db.all("SELECT orders.*, (SELECT FIO FROM users where idUser = orders.idUser) as userFIO, (SELECT phone FROM users WHERE idUser = orders.idUser) as userPhone, (SELECT email FROM users WHERE idUser = orders.idUser) as userEmail FROM orders ORDER BY createdAt DESC",  (err, orders) => {
         if (err) {
             return res.json({ success: false, message: "Ошибка БД" });
         }
