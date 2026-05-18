@@ -105,7 +105,7 @@ app.post("/api/register", (req, res)=> {
             if (existUser.phone === phone && existUser.idRole !== 2) {
                 return res.json({success: false, message: "Такой телефон уже зарегистрирован"});
             }
-            if (existUser.email === email) {
+            if (existUser.email === email && existUser.idRole !== 2) {
                 return res.json({ success: false, message: "Такой email уже зарегистрирован"});
             }
         }
@@ -162,9 +162,9 @@ app.post("/api/changeFIO", (req, res)=> {
 
 app.post("/api/changePhone", (req, res)=> {
     const {phone, login} = req.body;
-    db.get("SELECT * FROM users WHERE phone = ?", [phone], (err, existPhone) => {
+    db.get("SELECT * FROM users WHERE phone = ? AND login != ?", [phone, login], (err, existPhone) => {
         if (err) return res.status(500).json({success: false, message: "Ошибка сервера"});
-        if (existPhone){
+        if (existPhone && existPhone.idRole !== 2){
             return res.json({success: false, message: "Такой телефон уже занят"});
         }
         else {
@@ -183,9 +183,9 @@ app.post("/api/changeEmail", (req, res)=> {
     if(!email || !email.includes("@") || !email.includes(".") || email.length < 6){
         return res.json({success: false, message: "Введите корректный email"});
     }
-    db.get("SELECT * FROM users WHERE email = ?", [email], (err, existEmail) => {
+    db.get("SELECT * FROM users WHERE email = ? AND login != ?", [email, login], (err, existEmail) => {
         if (err) return res.status(500).json({success: false, message: "Ошибка сервера"});
-        if (existEmail && existEmail.login !== login){
+        if (existEmail && existEmail.idRole !== 2){
             return res.json({success: false, message: "Такой email уже зарегистрирован"});
         }
         else {
@@ -205,7 +205,7 @@ app.post("/api/changeLogin", (req, res)=> {
         return res.json({success: false, message: "Логин должен быть до 24 символов"});
     }
     console.log("Смена логина: old= "+login, ", new= "+newLogin);
-    db.get("SELECT * FROM users WHERE login = ?", [newLogin], (err, existLogin)=> {
+    db.get("SELECT * FROM users WHERE login = ? AND login != ?", [newLogin, login], (err, existLogin)=> {
         if (err) return res.status(500).json({success: false, message: "Ошибка сервера"});
         if (existLogin){
             return res.json({success: false, message: "Такой логин уже занят"});
