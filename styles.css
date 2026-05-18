@@ -45,6 +45,9 @@ header{
     text-decoration: none;
     color: black;
 }
+#menuToggle {
+    display: none;
+}
 .DivNav{
     background-color: #333;
     padding: 0;
