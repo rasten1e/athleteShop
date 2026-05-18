@@ -173,7 +173,12 @@
                     document.getElementById("FIOInf").textContent = data.data.FIO;
                     document.getElementById("phoneInf").textContent = data.data.phone;
                     document.getElementById("loginInf").textContent = data.data.login;
-                    document.getElementById("emailInf").textContent = data.data.email;
+                    if(data.data.email == null){
+                        document.getElementById("emailInf").textContent = "Email не указан";
+                    }
+                    else {
+                        document.getElementById("emailInf").textContent = data.data.email;
+                    }
                     const avatarImg = document.getElementById("userAvatar");
                     if (avatarImg && data.data.avatar) {
                         avatarImg.src = data.data.avatar + "?" + Date.now();
