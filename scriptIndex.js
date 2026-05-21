@@ -25,13 +25,10 @@ function startAutoPlay() {
     }, 5000);
 }
 startAutoPlay();
-
 const slider = document.querySelector(".DivSlider");
-
 slider.addEventListener("mouseenter", () => {
     clearInterval(autoPlayInterval);
 });
-
 slider.addEventListener("mouseleave", () => {
     startAutoPlay();
 });
